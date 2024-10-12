@@ -1,4 +1,9 @@
-#does all the random generation for the system features, star type, etc
+# generation.py will generate the random elements of the star system
+#
+# it will NOT generate the image of the star system
+#
+#
+#
 
 #imports
 import random
