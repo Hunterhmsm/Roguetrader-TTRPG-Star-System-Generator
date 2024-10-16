@@ -83,7 +83,6 @@ def starType():
     #return star type based on roll
     return starMap[star]
 
-
     #DEBUGGING
 
 def main():
