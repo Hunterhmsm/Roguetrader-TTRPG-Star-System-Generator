@@ -123,14 +123,87 @@ def innerCauldronElements(star):
     #return list of elements
     return elements
 
-       
+#NEED TO FIND WAY TO DEAL WITH A FEW CERTAIN STAR TYPES AND SYSTEM TYPES
+#returns a list of elements in the Primary Bioshere
+def primaryBioshereElements(star):
+    elements = [] #list of elements
+    #do the few stars that specifically influence the inner cauldron
+    if star == "Mighty":
+        amount = random.randint(1, 5) - 2
+    else: #every other star
+        amount = random.randint(1, 5)
+    #if less than 1, is 1
+    if amount <= 0:
+        amount = 1
+    #d100 roll
+    while amount > 0:
+        #change for evertime around it goes to different feature
+        rollin = random.randint(1,100)
+        if 1 == rollin or rollin <= 20:
+            elements.append("Nothing") 
+        elif 21 == rollin or rollin <= 30:
+            elements.append("Asteroid Belt")
+        elif 31 == rollin or rollin <= 41:
+            elements.append("Asteroid Cluster") 
+        elif 42 == rollin or rollin <= 47:
+            elements.append("Derelict Station") 
+        elif 48 == rollin or rollin <= 58:
+            elements.append("Dust Cloud")
+        elif 59 == rollin or rollin <= 64:
+            elements.append("Gravity Riptide")
+        elif 65 == rollin or rollin <= 93:
+            elements.append("Planet") 
+        elif 94 == rollin or rollin <= 100:
+            elements.append("Starship Graveyard")  
+        amount -= 1
+    return elements
 
-#Generates System Elemets
+#NEED TO FIND WAY TO DEAL WITH A FEW CERTAIN STAR TYPES AND SYSTEM TYPES
+#returns a list of elements in the Outer Reaches
+#good for single genereations
+def outerReachesElements(star):
+    elements = [] #list of elements
+    #do the few stars that specifically influence the inner cauldron
+    if star == "Dull":
+        amount = random.randint(1, 5) + 2
+    else: #every other star
+        amount = random.randint(1, 5)
+    #if less than 1, is 1
+    if amount <= 0:
+        amount = 1
+    #d100 roll
+    while amount > 0:
+        #change for evertime around it goes to different feature
+        rollin = random.randint(1,100)
+        if 1 == rollin or rollin <= 20:
+            elements.append("Nothing")
+        elif 21 == rollin or rollin <= 29:
+            elements.append("Asteroid Belt")
+        elif 30 == rollin or rollin <= 40:
+            elements.append("Asteroid Cluster")  
+        elif 41 == rollin or rollin <= 46:
+            elements.append("Derelict Station")  
+        elif 47 == rollin or rollin <= 55:
+            elements.append("Dust Cloud") 
+        elif 56 == rollin or rollin <= 73:
+            elements.append("Gas Gaint") 
+        elif 74 == rollin or rollin <= 80:
+            elements.append("Gravity Riptide")
+        elif 81 == rollin or rollin <= 93:
+            elements.append("Planet")
+        elif 94 == rollin or rollin <= 100:
+            elements.append("Starship Graveyard")
+        amount -= 1
+    return elements
+
+#Generates ALL System Elemets
 #Doesnt work well for Binary stars 
 #Binary stars need the stronger of the 2 to declare the solarzones in a area
 #THIS LOOKS LIKE SHIT
 def systemElements(star):
-    solarzone = random.randint(1,5)
+    solarzoneI = random.randint(1,5)
+    solarzoneP = random.randint(1,5)
+    solarzoneO = random.randint(1,5)
     InnerCauldron = 0
     InnerCauldronElements = []
     PrimaryBiosphere = 0
@@ -142,21 +215,21 @@ def systemElements(star):
     initialize = 0
     while initialize == 0:
         if star == "Mighty":
-            InnerCauldron = solarzone+2
-            PrimaryBiosphere = solarzone-2
-            OuterReaches = solarzone
+            InnerCauldron = solarzoneI+2
+            PrimaryBiosphere = solarzoneP-2
+            OuterReaches = solarzoneO
         elif star == "Vigorous":
-            InnerCauldron = solarzone
-            PrimaryBiosphere = solarzone
-            OuterReaches = solarzone
+            InnerCauldron = solarzoneI
+            PrimaryBiosphere = solarzoneP
+            OuterReaches = solarzoneO
         elif star == "Luminous":
-            InnerCauldron = solarzone-2
-            PrimaryBiosphere = solarzone
-            OuterReaches = solarzone
+            InnerCauldron = solarzoneI-2
+            PrimaryBiosphere = solarzoneP
+            OuterReaches = solarzoneO
         elif star == "Dull":
-            InnerCauldron = solarzone
-            PrimaryBiosphere = solarzone
-            OuterReaches = solarzone+2
+            InnerCauldron = solarzoneI
+            PrimaryBiosphere = solarzoneP
+            OuterReaches = solarzoneO+2
         elif star == "Anomalous":
             #Should allow one zone to be +2 and one zone -2
             gamble = random.randint(1,3)
@@ -174,36 +247,36 @@ def systemElements(star):
             #again subtracts 2 to solar by making it a WEAK zone
             #since gamble and again are different went through combinations manually
             elif gamble == 1 and again == 2:
-                InnerCauldron = solarzone + 2
-                PrimaryBiosphere = solarzone - 2
-                OuterReaches = solarzone
+                InnerCauldron = solarzoneI + 2
+                PrimaryBiosphere = solarzoneP - 2
+                OuterReaches = solarzoneO
             #this looks like manually input values to view if something is even.
             elif gamble == 1 and again == 3:
-                InnerCauldron = solarzone + 2
-                PrimaryBiosphere = solarzone
-                OuterReaches = solarzone - 2
+                InnerCauldron = solarzoneI + 2
+                PrimaryBiosphere = solarzoneP
+                OuterReaches = solarzoneO - 2
             elif gamble == 2 and again == 1:
-                InnerCauldron = solarzone - 1
-                PrimaryBiosphere = solarzone + 2
-                OuterReaches = solarzone
+                InnerCauldron = solarzoneI - 1
+                PrimaryBiosphere = solarzoneP + 2
+                OuterReaches = solarzoneO
             elif gamble == 2 and again == 3:
-                InnerCauldron = solarzone
-                PrimaryBiosphere = solarzone + 2
-                OuterReaches = solarzone - 2
+                InnerCauldron = solarzoneI
+                PrimaryBiosphere = solarzoneP + 2
+                OuterReaches = solarzoneO - 2
             elif gamble == 3 and again == 1:
-                InnerCauldron = solarzone - 2
-                PrimaryBiosphere = solarzone
-                OuterReaches = solarzone + 2
+                InnerCauldron = solarzoneI - 2
+                PrimaryBiosphere = solarzoneP
+                OuterReaches = solarzoneO + 2
             elif gamble == 3 and again == 2:
-                InnerCauldron = solarzone
-                PrimaryBiosphere = solarzone - 2
-                OuterReaches = solarzone + 2
+                InnerCauldron = solarzoneI
+                PrimaryBiosphere = solarzoneP - 2
+                OuterReaches = solarzoneO + 2
         elif star == "Binary":
             #this is complicated using the solarzone of the most powerful star in the binary system
             #Needs to be added to later for now assuming a Vigorous formation is most powerful in formation
-            InnerCauldron = solarzone
-            PrimaryBiosphere = solarzone
-            OuterReaches = solarzone
+            InnerCauldron = solarzoneI
+            PrimaryBiosphere = solarzoneP
+            OuterReaches = solarzoneO
         initialize = 1
     #makes sure there is not a negative number or a zero for solar zones in a location
     #solar zones can have nothing but should have the chance to have something
@@ -302,7 +375,10 @@ def systemElements(star):
 def main():
     print(starType())
     #proof that sytemelements works for now
-    print(systemElements(starType()))
+    print(innerCauldronElements(starType()))
+    print(primaryBioshereElements(starType()))
+    print(outerReachesElements(starType()))
+    #print(systemElements(starType()))
 
 if __name__ == "__main__":
     main()
