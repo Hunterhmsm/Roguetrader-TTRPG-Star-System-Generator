@@ -11,8 +11,7 @@ import array
 
 #determines the amount of system features
 def amountOfSystemFeatures():
-    int = random.randint(1,5)
-    int -= 2
+    int = random.randint(1,5) - 2
     
     if int <= 0:
         int = 1
@@ -83,6 +82,48 @@ def starType():
     }
     #return star type based on roll
     return starMap[star]
+#
+#NEED TO FIND WAY TO DEAL WITH A FEW CERTAIN STAR TYPES AND SYSTEM TYPES
+#returns a list of elements in the Inner Cauldron
+def innerCauldronElements(star):
+    elements = [] #list of elements
+    element = "" 
+    #do the few stars that specifically influence the inner cauldron
+    if star == "Mighty":
+        amount = random.randint(1, 5) + 2
+    elif star == "Luminous":
+        amount = random.randint(1, 5) - 2
+    else: #every other star
+        amount = random.randint(1, 5)
+    #if less than 1, is 1
+    if amount <= 0:
+        amount = 1
+    #d100 roll
+    while amount > 0:
+        roll100 = random.randint(1, 100)
+        if 1 <= roll100 <= 20:
+            element = "No_Feature"
+        elif 21 <= roll100 <= 29:
+            element = "Asteroid_Cluster"
+        elif 30 <= roll100 <= 41:
+            element = "Dust_Cloud"
+        elif 42 <= roll100 <= 45:
+            element = "Gas_Giant"
+        elif 46 <= roll100 <= 56:
+            element = "Gravity_Riptide"
+        elif 57 <= roll100 <= 76:
+            element = "Planet"
+        elif 77 <= roll100 <= 88:
+            element = "Radiation_Bursts"
+        elif 89 <= roll100 <= 100:
+            element = "Solar_Flares"
+        #add chosen element to list of elements
+        elements.append(element)
+        amount -= 1
+    #return list of elements
+    return elements
+
+       
 
 #Generates System Elemets
 #Doesnt work well for Binary stars 
