@@ -8,7 +8,7 @@
 #list of imports
 import random
 import numpy
-from generation import amountOfSystemFeatures, systemFeatures, starType
+from generation import amountOfSystemFeatures, systemFeatures, starType, innerCauldronElements
 
 def main():
     #gets the system features and stores them in a list
@@ -20,17 +20,19 @@ def main():
             features.append(tempFeature) #add it to the list
             systemFeaturesNumber -= 1 #reduce the amount of features left by 1
     
-    
-    
-
     #gets the type of star randomly
     typeOfStar = starType()
+
+    #gets inner cauldron elements
+    innerCauldron = innerCauldronElements(typeOfStar)
 
 
     #debugging
     for feature in features:
-        print("feature" , feature)
-    print("star" , typeOfStar)
+        print("System Feature" , feature)
+    print("Star" , typeOfStar)
+    for element in innerCauldron:
+        print("Inner Cauldron Element", element)
 
 if __name__ == "__main__":
     main()
