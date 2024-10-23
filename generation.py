@@ -358,8 +358,9 @@ def systemElements(star):
             OuterFeaturesElements.append("Starship Graveyard")
         i = i+1
     #NOW IMPROVED VERSION
-    #LOOKS LIKE SHIT
-    return print(InnerCauldronElements, PrimaryBiosphereElements, OuterFeaturesElements)
+    #LOOKS SLIGHTLY BETTER 
+    #Seperates System Elements
+    return print("Inner Cauldron's Elements: ",InnerCauldronElements,"\nPrimary Bioshpere's Elements: ",PrimaryBiosphereElements,"\nOuter Feature's Elements: ",OuterFeaturesElements)
 
 
 
@@ -371,14 +372,332 @@ def systemElements(star):
 
     #DEBUGGING
 
+#Generates what the derelict station, origin's is 
+#probably could write a better way to read the descriptions
+def derelictStationOrigins():
+    #roll d100
+    rollin = random.randint(1,100)
+    #produces what the station was used for and the description of the station
+    if 1 == rollin or rollin <= 10:
+        reason = "Egarian Void-maze"
+        description = "The station is a baffling construct of crystals with no readily apparent purpose or function but, \nbuilt along similar geometrical principles as the dead cities of the Egarian Dominion."
+    elif 11 == rollin or rollin <= 20:
+        reason = "Eldar Orrery"
+        description = "The station is constructed of the smooth, bone-like material from which the Eldar make their ships, and is riddled with cloistered cells. \nExamination by a Navigator or psyker hints at a long-vanished power permeating the structure."
+    elif 21 == rollin or rollin <= 25:
+        reason = "Eldar Gate"
+        description = "This vast Eldar contraption resembles nothing so much as the frame of an enormous door, but only the empty void shows through it. \nNo amount of searching yields a sign of its purpose or function."
+    elif 26 == rollin or rollin <= 40:
+        reason = "Ork Rok"
+        description = "From the outside, this “station” appears to be nothing more than a lonely, out of the way asteroid. \nDespite its appearance, it has been thoroughly hollowed out, and filled with dubious Orky technology. Some of the technology might even have worked at one point."
+    elif 41 == rollin or rollin <= 50:
+        reason = "STC Defence Station"
+        description = "The core of the station is based off a standard pattern derived from Standard Template Construct technology, like countless others throughout the Imperium. \nWhat remains of the banks of weapon batteries and torpedo bays indicates that it was once intended to safeguard a human colony from attack"
+    elif 51 == rollin or rollin <= 65:
+        reason = "STC Monitor Station"
+        description = "The core of the station is based off a standard pattern derived from Standard Template Construct technology, like countless others throughout the Imperium. \nDespite its age, the hull still bristles with auger arrays and reception panels that indicate its former use as a communications or intelligence hub."
+    elif 66 == rollin or rollin <= 75:
+        reason = "Stryxis Collection"
+        description = "Calling this accumulation of wreckage and junk a space station would insult an Ork Mek, much less a shipwright of the Adeptus Mechanicus. \nThe only explanation for its accretion comes from the vox-beacon broadcasting some kind of territorial claim by the Stryxis"
+    elif 77 == rollin or rollin <= 85:
+        reason = "Xenos Defence Station"
+        description = "The architecture of the station does not match any examples yet encountered, but it is clearly inhuman in origin. \nThough the technology that comprises it is strange, there is no mistaking the intended purpose of its decaying armaments"
+    elif 86 == rollin or rollin <= 100:
+        reason = "Xenos Monitor Station"
+        description = "The architecture of the station does not match any examples yet encountered, but it is clearly inhuman in origin. \nIts purpose is hard to ascertain for sure, but some of the arcane devices that line its hull resemble vox hubs and other necessities for a deep space monitor station."
+    return print("Reason:", reason, "\nDescription:", description)
+
+#Generates Starship Graveyard Origins
+#probably could write a better way to read the descriptions
+#The nature of the race or races that produced the ships is left to the GM’s discretion.
+#possibly put together with system elements
+#or leave as is to generate later
+def starshipGraveyardOrigins():
+    #roll d100
+    rollin = random.randint(1,100)
+    #produces what the caused the graveyard 
+    if 1 == rollin or rollin <= 15:
+        reason = "Crushed Defence Force/Routed Invasion"
+        #these descriptions are really long
+        description = "The wreckage is all that remains of a defeated battlefleet. Whichever side of the long-ago conflict that fielded these vessels was decisively defeated, \nwith most or all of the hulks belonging to the same force. The graveyard consists of 2d5 ships, of which most or all have been shattered beyond any value."
+        ships = (random.randint(1,5)+random.randint(1,5))
+    elif 16 == rollin or rollin <= 20:
+        reason = "Fleet Engagement"
+        description = ": A massive conflict once raged here, as evidenced by the abundance of battle-scarred hulls left behind by both sides. \nThe graveyard consists of 1d10+6 hulks, and can also include vast fields of unexploded mines, spent volleys of torpedoes, or the drifting wings of attack craft. \nRoughly half of the ships and materiel expended came from each side. \nThe fury of the conflict consumed much of value, but the sturdy construction of warships means that at least a few of them might be worth salvaging."
+        ships = random.randint(1,10)+6
+    elif 21 == rollin or rollin <= 35:
+        reason = "Lost Explorers"
+        description = "These ships were not lost to enemy action, but to overextended supply vaults, or the failure of long suffering vital systems. \nThe expedition is unlikely to include as many as even half a dozen ships, but few (if any) of them have deteriorated enough to prohibit salvage efforts."
+        #up to DM usally less than half a dozen
+        ships = "up to DM usally less than half a dozen"
+    elif 36 == rollin or rollin <= 65:
+        reason = "Plundered Convoy"
+        description = "A lost shipping lane of some kind might have once crossed this system, as evidenced by this gutted procession of transports and cargo vessels. \nTheir holds have been long since emptied, but it is possible their attackers might have missed something of value. \nThere are 1d5+2 ships in the convoy, of which most or all remain intact enough to allow boarding, but little else"
+        ships = random.randint(1,5)+2
+    elif 66 == rollin or rollin <= 90:
+        reason = "Skirmish"
+        description = " Elements from two different battlefleets clashed here, with each leaving behind a handful of their complement. The graveyard consists of 1d5+3 hulks. \nRoughly half of the ships came from each side. The fury of the conflict all ships involved, \nbut the sturdy construction of warships means that at least a few of them might be worth salvaging."
+        ships = random.randint(1,5)+3
+    elif 91 == rollin or rollin <= 100:
+        reason = "Unknown Provenance"
+        description = "The bizarre assortment of different vessels drifting past defies easy explanation. \nIt is likely to bring to mind the eerie legends of the Processional of the Damned, where broken ships from across the Expanse arrive like spectres in some strange afterlife. \nWhether associated with that haunted realm, or the result of some more mundane confusion, \nthe graveyard consists of the twisted wreckage of dozens of utterly ruined ships of all kinds, as well as 1d5 hulks in varying degrees of integrity. \nNone of the hulks share an origin"
+        ships = random.randint(1,5)
+    #Template possible for latter use
+    #elif == rollin or rollin <= :
+    #   reason = ""
+    #    description = ""
+    return print("Reason: ",reason,"\nDescription: ",description,"\nShips: ",ships)
+
+#Uses a normal Planet, generate its Body, Gravity, Orbital Features, Atmosphere, Climate, Habitability, and Landmasses
+#Used to generate ROCK PLANETS
+#Generates the Entire planet
+def rockPlanetCreation(Location):
+    bodyRoll = random.randint(1,10)
+    #rolls a d10 for the body 
+    #gets the body type of a rock planet
+    if 1 == bodyRoll:
+        body = "Low-Mass"
+        #another set of unending descriptions
+        bodyDesc = "The world is even lower in mass than its small size would suggest. It is likely comprised of light materials, \nor it has large pockets of trapped gas making up much of its volume. \nApply -7 to the result of any roll on Table 1-7: Gravity. Generate Resources and Environments as if the world was Small. \nMineral Resource deposits cannot exceed Limited in abundance."
+        #-7 to gravity
+        gravityRoll = random.randint(1,10)-7
+    elif 2 == bodyRoll or bodyRoll == 3:
+        body = "Small"
+        bodyDesc = "This world lacks the mass and size to support significant gravity or resources. Apply -5 to the result of anyroll on Table 1-7: Gravity."
+        #-5 to gravity
+        gravityRoll = random.randint(1,10)-5
+    elif 4 == bodyRoll:
+        body = "Small and Dense"
+        bodyDesc = "The shrunken silhouette of this Planet belies the strength of its gravity well and the richness of its crust. Generate Resources and Environments as if the world was Small. \nAdd +10 to the result of any on Table 1-19: Resource Abundance for any Mineral Resources"
+        #+5 to Resource Abundance
+        gravityRoll = random.randint(1,10)
+    elif 5 == bodyRoll or bodyRoll <= 7:
+        body = "Large"
+        bodyDesc = "Worlds of this size can range across a vast spectrum of possible types."
+        #NOTHING
+        gravityRoll = random.randint(1,10)
+    elif 8 == bodyRoll:
+        body = "Large and Dense"
+        bodyDesc = "Though impressive in volume, the mass of this world is, in fact, compressed significantly. Add +5 to the result of any roll on Table 1-7: Gravity. \nGenerate Resources and Environments as if the world was Large. \nAdd +10 to the result of any roll on Table 1–19: Resource Abundance for any Mineral Resources"
+        #+5 to gravity and +10 to Resouce Abundance, Generate as if world was large
+        gravityRoll = random.randint(1,10)+5
+    elif 9 == bodyRoll or bodyRoll == 10:
+        body = "Vast"
+        bodyDesc = " Huge and voluminous, worlds of this type strain the upper edges of the possible size for a single world. \nSuch Planets tend to be of middling density, as they are already more massive than is common. \nAdd +4 to the result of any roll on Table 1-7: Gravity."
+        #+4 to gravity 
+        gravityRoll = random.randint(1,10)+4
+    #makes sure gravityRoll is not negative
+    if gravityRoll < 1:
+        gravityRoll = 1
+    if 1 == gravityRoll or gravityRoll == 2:
+        gravity = "Low Gravity"
+        gravityDesc = " Apply -10 to any roll on Table 1-8: Orbital Features. Apply -2 to any roll on Table 1-9: Atmospheric Presence. \nIt follows all the rules for Low Gravity Worlds (see page 269 of the ROGUE TRADER Core Rulebook)."
+        #Follow low Gravity rules
+        #-10 to rolls on orbital Features
+        #-2 to rolls on atomspheric presence
+        orbitalFeatureRoll = random.randint(1,5)-3 #rolls how many orbital features there are
+        atmosphericPresnceRoll = random.randint(1,10)-2 #rolls for what the atmospheric presnce is
+    elif 3 == gravityRoll or gravityRoll <= 8:
+        gravity = "Normal Gravity"
+        gravityDesc = "This Planet's gravity is roughly Terran Standard."
+        #NOTHING
+        orbitalFeatureRoll = random.randint(1,5)-2 #rolls how many orbital features there are
+        atmosphericPresnceRoll = random.randint(1,10) #rolls for what the atmospheric presnce is
+    elif gravityRoll >= 9:
+        gravity = "High Gravity"
+        gravityDesc = "Add +10 to any roll on Table 1-8: Orbital Features. Add +1 to the roll on Table 1-9: Atmospheric Presence. \nThis Planet follows all the rules for High Gravity Worlds (see page 269 of the ROGUE TRADER Core Rulebook)."
+        #+10 to rolls on orbital features
+        #+1 to rolls on Atmosheric Presence
+        #Follow High Gravity rules
+        orbitalFeatureRoll = random.randint(1,5)-1 #rolls how many orbital features there are
+        atmosphericPresnceRoll = random.randint(1,10)+1 #rolls for what the atmospheric presnce is
+    #makes sure orbital Feature roll is min 1
+    if orbitalFeatureRoll <= 1:
+        orbitalFeatureRoll = 1
+    orbitalFeature = [] #list of orbital features
+    orbitalFeatDESC = [] #Description of orbital feature
+    while orbitalFeatureRoll >= 1:
+        if gravity == "Low Gravity":
+            rollOrbitalFeat = random.randint(1,100)-10
+        elif gravity == "High Gravity":
+            rollOrbitalFeat = random.randint(1,100)+10
+        else:
+            rollOrbitalFeat = random.randint(1,100)
+        if rollOrbitalFeat <= 45:
+            orbitalFeature.append("nothing")
+            orbitalFeatDESC.append("\nOrbital Feature Description: nothing")
+        elif 46 == rollOrbitalFeat or rollOrbitalFeat <= 60: 
+            orbitalFeature.append("Large Asteroid")
+            orbitalFeatDESC.append("\nOrbital Feature Description: An asteroid of unusual size has been captured by the Planet's gravity well, and now occupies a stable orbit around it. \nIt is just large enough to be noted by an orbital survey, but not enough to be seen from the Planet's surface without visual enhancement.")
+        elif 61 == rollOrbitalFeat or rollOrbitalFeat <= 90:
+            orbitalFeature.append("Lesser Moon")
+            orbitalFeatDESC.append("\nOrbital Feature Description: An orbital body somewhere between an extremely large asteroid and a very small moon orbits the Planet. \nIt has its own extremely limited gravity well, allowing low-gravity travel across the surface, as described on page 269 of the ROGUE TRADER Core Rulebook. \nWhen generating a Lesser Moon, roll 1d10; on a result of 6 or higher, it houses sufficient mineral wealth to count as a Resource. \nRoll once on Table 1–20: Mineral Resources and once on Table 1–19: Mineral Abundance, receiving a –5 penalty to the latter roll.")
+            mineral = random.randint(1,10)
+            if mineral >= 6:
+                #roll once for Mineral Resources
+                ballz = ""
+                #used ballz to prevent an error for now change later
+                #roll once for Mineral Abundance -5 to roll
+        elif 91 <= rollOrbitalFeat:
+            orbitalFeature.append("MOON")
+            orbitalFeatDESC.append("Orbital Feature Description: A true moon is generated as a Planet, using the rules for Planet Creation (see page 19). \nUnder normal circumstances, a moon cannot have a higher Planetary Body than the world around which it orbits. \nIn addition, a moon never generates its own Orbital Features.")
+            #create another method for MOON creation using the same as planets but without the moon to get a bigger size than the planets
+        orbitalFeatureRoll -= 1 
+    #Used to generate the atmoshere of the planet
+    if atmosphericPresnceRoll <= 1:
+        Atmosphere = "None :("
+        atmosphereDesc = "The Planet has no atmosphere, or it has one so thin as to be effectively nonexistent. \nActivity on the Planet is treated as being in vacuum, as covered on pages 262-263 of the ROGUE TRADER Core Rulebook. \nNormally, this means that there is no need to roll on Table 1-10: Atmospheric Composition"
+    elif 2 == atmosphericPresnceRoll or atmosphericPresnceRoll <= 4:
+        Atmosphere = "Thin"
+        atmosphereDesc = " The Planet's atmosphere is weak, but avoids the problems of an actual vacuum. \nTests to avoid harm from a Toxic or Corrosive atmosphere are made at a +10 bonus. However, the lack of air makes strenuous activity difficult. \nAny time an Explorer relying on the outside air gains Fatigue, he gains the normal amount plus one additional level of Fatigue instead."
+    elif 5 == atmosphericPresnceRoll or atmosphericPresnceRoll <= 9:
+        Atmosphere = "Moderate"
+        atmosphereDesc = "Atmospheres in this range produce no ill effects due to lack or overabundance of air, though they can still be Toxic or Corrosive"
+    elif atmosphericPresnceRoll >= 10:
+        Atmosphere = "Heavy"
+        atmosphereDesc = " A thick blanket of air presses down on the Planet, coming just short of smothering those beneath it. This oppressive weight imposes a -5 penalty on Strength or Toughness Tests, at the GM's discretion. \nTests to avoid harm from a Toxic or Corrosive Atmosphere are made at a -10 penalty. If the atmosphere is breathable, the thickness of the air makes it difficult to take in. \nA full hour of relying on such an atmosphere for air inflicts a single level of Fatigue. This effect is not cumulative, no matter how long a character relies on the air. \nHowever, recovery from this level of Fatigue cannot occur while relying on such an atmosphere." 
+
+    #Checks to see if there is an Atmoshpere
+    if Atmosphere == "None :(":
+        atmosphericComp = "None No Atmosphere"
+        atmoshericCompDesc = "None No Atmoshere"
+    #if Atmoshpere
+    #Does an Atmosheric Composition set and implements it
+    else:    
+        #Rolls for Atmospheric Composition
+        atmosphericCompRoll = random.randint(1,10)
+        if atmosphericCompRoll == 1:
+           atmosphericComp = "Deadly"
+           atmoshericCompDesc = "An atmosphere of this sort is little more than a vast acid bath. \nAnyone not protected by a full environmental seal suffers 1d5+1 Damage each Round that ignore Toughness Bonus and Armour. \nIf the atmosphere is also Heavy, it wears away at resistance, breaking into environmental seals after 1d10+2 hours."
+           #if heavy atmoshpere breaks environmental seal after 1d10+2 hours
+           #maybe add the 1d5+1 and 1d10+2 later if needed
+        elif atmosphericCompRoll == 2:
+            atmosphericComp = "Corrosive"
+            atmoshericCompDesc = "This atmosphere is both poisonous to breathe and deadly on any sort of contact. \nAnyone not protected by a full environmental seal must make a Difficult (-10) Toughness Test each Round, or suffer 1d5 Damage that ignores Armour and Toughness Bonus. \nContinued exposure results in suffocation, as per page 261 of the ROGUE TRADER Core Rulebook."
+        elif 3 == atmosphericCompRoll or atmosphericCompRoll <= 5:
+            atmosphericComp = "Toxic"
+            atmoshericCompDesc = "Poisonous gases and vapours fill the Planet's atmosphere. \nSimply breathing the air requires a Challenging (+0) Toughness Test each Round to avoid suffering 1 Damage that ignores Toughness Bonus and Armour. \nAdditionally, continued exposure results in suffocation, as per the rules on page 261 of the ROGUE TRADER Core Rulebook."
+        elif 6 == atmosphericCompRoll or atmosphericCompRoll == 7:
+            atmosphericComp = "Tainted"
+            atmoshericCompDesc = "Though capable of sustaining human life, this atmosphere is not entirely safe, stained by trace elements of toxins. \nThough it does not directly affect the Explorers, it might influence the viability or costs of long-term colonisation"
+        elif atmosphericCompRoll >= 8:
+            atmosphericComp = "Pure"
+            atmoshericCompDesc = "The atmosphere is entirely safe for humans and most other common life forms to breathe."
+    
+    #No atmoshpere changes how climites work
+    if Atmosphere == "None :(":
+        if Location == "Inner Cauldron":
+            #creates a climate and its description
+            climate = "Burning World"
+            climateDesc = " A fierce heat blankets the Planet in its entirety. The heat usually recedes at night, but it is likely still too warm for comfort. \nThe entire Planet is affected by extreme heat. Tests made to resist the heat are Very Hard (–30)."
+        elif Location == "Outer Reaches":
+            #creates a climate and its description
+            climate = "Ice World"
+            climateDesc = "The Planet is frozen, from pole to pole. The entire Planet is affected by extreme cold. Tests made to resist the cold are Very Hard (-30)."
+        else:
+            coin = random.randint(1,2)
+            if coin == 1:
+                #creates a climate and its description
+                climate = "Burning World"
+                climateDesc = " A fierce heat blankets the Planet in its entirety. The heat usually recedes at night, but it is likely still too warm for comfort. \nThe entire Planet is affected by extreme heat. Tests made to resist the heat are Very Hard (–30)."
+            else:
+                #creates a climate and its description
+                climate = "Ice World"
+                climateDesc = "The Planet is frozen, from pole to pole. The entire Planet is affected by extreme cold. Tests made to resist the cold are Very Hard (-30)."
+    else:
+        if Location == "Inner Cauldron":
+            climateRoll = random.randint(1,10)-6
+        elif Location == "Outer Reaches":
+            climateRoll = random.randint(1,10)+6
+        else:
+            climateRoll = random.randint(1,10)
+        #Generates the rest of the climate infromation
+        if climateRoll <= 0:
+            climate = "Burning World"
+            climateDesc = "A fierce heat blankets the Planet in its entirety. The heat usually recedes at night, but it is likely still too warm for comfort. \nThe entire Planet is affected by extreme heat. Tests made to resist the heat are Very Hard (–30)."
+        elif 1 == climateRoll or climateRoll <= 3:
+            climate = "Hot World"
+            climateDesc = "Most of this Planet is dangerously hot, but various regions can be found with more moderate microclimates. \nOutside of these sheltered regions, the entire Planet is affected by extreme heat. \nTests made to resist the heat generally range from Challenging (+0) to Hard (–20). \nIn some cases, the sheltered regions are also afflicted by extreme heat, but of a less severe degree than the rest of the Planet."
+        elif 4 == climateRoll or climateRoll <= 7:
+            climate = "Temperate World"
+            climateDesc = "Temperate Planets are exclusively found in or near a system’s Primary Biosphere. They might contain regions of either extreme heat or extreme cold, and in many cases, have some of both. \nThe Tests made to resist temperature extremes on these Planets rarely exceed Difficult (–10)."
+        elif 8 == climateRoll or climateRoll <= 10:
+            climate = "Cold World"
+            climateDesc = " Most of this Planet is dangerously cold, but various regions can found with more moderate microclimates. \nOutside of these sheltered regions, the entire Planet is affected by extreme cold. \nTests made to resist the heat generally range from Challenging (+0) to Hard (–20). \nIn some cases, the sheltered regions are also afflicted by extreme cold, but of a less severe degree than the rest of the Planet."
+        elif climateRoll >= 11:
+            climate = "Ice World"
+            climateDesc = "The Planet is frozen, from pole to pole. The entire Planet is affected by extreme cold. Tests made to resist the cold are Very Hard (-30)."
+        #can be changed at DMS descresion to allow bad atmoshere planets to be habitable
+        #this rolls for Habitability
+    habRoll = 100
+    if atmosphericComp == "Pure" or atmosphericComp == "Tainted":
+        if climate == "Cold World" or climate == "Hot World":
+            habRoll = random.randint(1,10)-2
+        elif climate == "Ice World" or climate == "Burning World": #also makes sure habroll doesnt get better than a 3
+            habRoll = random.randint(1,10)-7
+            if habRoll > 3:
+                 habRoll = 3
+        else:
+                 habRoll=random.randint(1,10)
+    else:
+         #used to Initialize in case planet not habitable
+        habRoll = 30 #just to initialize variable (habroll of 3000 not obtainable normally) 
+    if habRoll <= 1:
+        habitability = "Inhospitable"
+        habDesc = "There is no life or water to be found on this Planet."
+    elif habRoll == 2 or habRoll == 3:
+        habitability = "Trapped Water"
+        habDesc = "There is water on this Planet, but it is in a form that requires processing before it can be used or consumed. \nIt might be frozen or have boiled away to vapour on Planets with extreme climates. \nAlternatively, the water could be locked away in deep channels underground, or contaminated with other materials."
+    elif habRoll == 4 or habRoll == 5:
+        habitability = "Liquid Water"
+        habDesc = "Liquid water is accessible on the Planet's surface, but no native life has arisen to make use of it."
+    elif habRoll == 6 or habRoll == 7:
+        habitability = "Limited Ecosystem"
+        habDesc = ": The Planet has native life of a limited variety. It could be that this Planet’s species have not advnced beyond basic proto-biology, \nor their spread across the Planet was restricted by local conditions. This might also indicate a Planet on the decline, or recovering from a devastating natural disaster."
+    elif habRoll >= 8 and habRoll < 30:
+        habitability = "Verdant"
+        habDesc = "The Planet has a thriving ecosystem. A variety of species can be found almost anywhere on the Planet."
+    elif habRoll == 30: #Change if you are DM and want a habitable planet with bad or no atmoshere
+        habitability = "BAD ATMOSHERE :("
+        habDesc = "NONE"
+    else:
+        habitability = "Error generating habitability"
+        habDesc = "Error generating habitability"
+    #Rolls for landmass
+    landROll = random.randint(1,10)
+    if landROll >= 8:
+        Landmasses = random.randint(1,5)
+        LandDesc = "Planet has " + str(Landmasses) + " Continent/s or Archipelegoes with a GM's discretion of small islands"
+    elif landROll >= 4 and habRoll >= 4:
+        Landmasses = random.randint(1,5)
+        LandDesc = "Planet has  " + str(Landmasses) + " Continent/s or Archipelegoes with a GM's discretion of small islands"
+    elif habRoll >= 4:
+        Landmasses = 1
+        LandDesc = "Planet has a single main landmass with rivers, streams and lakes"
+    else:
+        Landmasses = 1
+        LandDesc = "Yep thats a Rock Floating in space"
+    #CHANGE orbital features to make more sense if it looks like shit (it will)
+    #Find a way to get it so that orbital features and orbital feature description are together
+    #rare chance that Habitability wont get filled out (It was because it was one line over in an else statement that only gets filled out when no atmoshere)
+    return print("Body: "+ body + "\nBody Description: "+ bodyDesc + "\n\nGravity: "+ gravity + "\nGravity Description: " + gravityDesc + "\n\nOrbital Feature: "+"\nOrbital Feature: ".join(orbitalFeature) + "\n\n".join(orbitalFeatDESC) + "\n\nAtmoshere: " + Atmosphere + "\nAtmoshere Description: " + atmosphereDesc + "\n\nAtmosheric Composition: "+ atmosphericComp+ "\nAtmosheric Compositon Description: "+ atmoshericCompDesc + "\n\nCLimate: " + climate + "\nClimate Discription: " + climateDesc + "\n\nHabitablility: " + habitability + "\nHabitablility Discription: " + habDesc + "\n\nLandmasses: " + str(Landmasses) + "\nLandmass Discription: " + LandDesc)
+    
 
 def main():
-    print(starType())
+    #print(starType())
     #proof that sytemelements works for now
-    print(innerCauldronElements(starType()))
-    print(primaryBioshereElements(starType()))
-    print(outerReachesElements(starType()))
+    #print(innerCauldronElements(starType()))
+    #print(primaryBioshereElements(starType()))
+    #print(outerReachesElements(starType()))
     #print(systemElements(starType()))
+    #print(derelictStationOrigins())
+    #print(starshipGraveyardOrigins())
+    #Location = "Inner Cauldron"
+    #Location = "Outer Reaches"
+    Location = "CENTER" 
+    print(rockPlanetCreation(Location))
+
+
 
 if __name__ == "__main__":
     main()
