@@ -451,6 +451,8 @@ def starshipGraveyardOrigins():
 #Uses a normal Planet, generate its Body, Gravity, Orbital Features, Atmosphere, Climate, Habitability, and Landmasses
 #Used to generate ROCK PLANETS
 #Generates the Entire planet
+#Find Way to get generation to look cleaner with the moons situation perferably put it into a file or something 
+#Find way to get Orbital Feature not to dupe don't understand why it dupes
 def rockPlanetCreation(Location):
     bodyRoll = random.randint(1,10)
     #rolls a d10 for the body 
@@ -531,17 +533,21 @@ def rockPlanetCreation(Location):
             orbitalFeatDESC.append("\nOrbital Feature Description: An asteroid of unusual size has been captured by the Planet's gravity well, and now occupies a stable orbit around it. \nIt is just large enough to be noted by an orbital survey, but not enough to be seen from the Planet's surface without visual enhancement.")
         elif 61 == rollOrbitalFeat or rollOrbitalFeat <= 90:
             orbitalFeature.append("Lesser Moon")
-            orbitalFeatDESC.append("\nOrbital Feature Description: An orbital body somewhere between an extremely large asteroid and a very small moon orbits the Planet. \nIt has its own extremely limited gravity well, allowing low-gravity travel across the surface, as described on page 269 of the ROGUE TRADER Core Rulebook. \nWhen generating a Lesser Moon, roll 1d10; on a result of 6 or higher, it houses sufficient mineral wealth to count as a Resource. \nRoll once on Table 1–20: Mineral Resources and once on Table 1–19: Mineral Abundance, receiving a –5 penalty to the latter roll.")
             mineral = random.randint(1,10)
             if mineral >= 6:
-                #roll once for Mineral Resources
-                ballz = ""
-                #used ballz to prevent an error for now change later
-                #roll once for Mineral Abundance -5 to roll
+                #Roll for abundace with -5 to roll
+                minRec = mineralResource()
+                abundRoll = random.randint(1,100)-5
+                abundance = resourceAbundance(abundRoll)
+            else:
+                minRec = "None :("
+                abundance = "None no minerals"
+            orbitalFeatDESC.append("\nOrbital Feature Description: An orbital body somewhere between an extremely large asteroid and a very small moon orbits the Planet. \nIt has its own extremely limited gravity well, allowing low-gravity travel across the surface, as described on page 269 of the ROGUE TRADER Core Rulebook. \nWhen generating a Lesser Moon, roll 1d10; on a result of 6 or higher, it houses sufficient mineral wealth to count as a Resource. \nRoll once on Table 1–20: Mineral Resources and once on Table 1–19: Mineral Abundance, receiving a –5 penalty to the latter roll.\nMinerals on Lesser Moon: "+ minRec +"\nAbundance of Resource: "+ abundance)
         elif 91 <= rollOrbitalFeat:
             orbitalFeature.append("MOON")
-            orbitalFeatDESC.append("Orbital Feature Description: A true moon is generated as a Planet, using the rules for Planet Creation (see page 19). \nUnder normal circumstances, a moon cannot have a higher Planetary Body than the world around which it orbits. \nIn addition, a moon never generates its own Orbital Features.")
+            orbitalFeatDESC.append("\nOrbital Feature Description: A true moon is generated as a Planet, using the rules for Planet Creation (see page 19). \nUnder normal circumstances, a moon cannot have a higher Planetary Body than the world around which it orbits. \nIn addition, a moon never generates its own Orbital Features.")
             #create another method for MOON creation using the same as planets but without the moon to get a bigger size than the planets
+            moonCreation(body, Location)
         orbitalFeatureRoll -= 1 
     #Used to generate the atmoshere of the planet
     if atmosphericPresnceRoll <= 1:
@@ -677,11 +683,374 @@ def rockPlanetCreation(Location):
     else:
         Landmasses = 1
         LandDesc = "Yep thats a Rock Floating in space"
+    #combines orbit and features ?
+    combinedOrbitFeatures = [item for pair in zip(orbitalFeature, orbitalFeatDESC) for item in pair]
+    combinedOrbitFeatures += orbitalFeature[len(orbitalFeatDESC):] + orbitalFeatDESC[len(orbitalFeature):]
+
+    #CHANGE orbital features to make more sense if it looks like shit (it will)
+    #Find a way to get it so that orbital features and orbital feature description are together (FIXED)
+    #rare chance that Habitability wont get filled out (It was because it was one line over in an else statement that only gets filled out when no atmoshere)
+    #old version below
+    #return print("Body: "+ body + "\nBody Description: "+ bodyDesc + "\n\nGravity: "+ gravity + "\nGravity Description: " + gravityDesc + "\n\nOrbital Feature: "+"\nOrbital Feature: ".join(orbitalFeature) + "\nOrbital Feature Description" + "\n\n".join(orbitalFeatDESC) + "\n\nAtmoshere: " + Atmosphere + "\nAtmoshere Description: " + atmosphereDesc + "\n\nAtmosheric Composition: "+ atmosphericComp+ "\nAtmosheric Compositon Description: "+ atmoshericCompDesc + "\n\nCLimate: " + climate + "\nClimate Discription: " + climateDesc + "\n\nHabitablility: " + habitability + "\nHabitablility Discription: " + habDesc + "\n\nLandmasses: " + str(Landmasses) + "\nLandmass Discription: " + LandDesc)
+    return print("Body: "+ body + "\nBody Description: "+ bodyDesc + "\n\nGravity: "+ gravity + "\nGravity Description: " + gravityDesc + "\n\nOrbital Feature: ".join(combinedOrbitFeatures) + "\n\nAtmoshere: " + Atmosphere + "\nAtmoshere Description: " + atmosphereDesc + "\n\nAtmosheric Composition: "+ atmosphericComp+ "\nAtmosheric Compositon Description: "+ atmoshericCompDesc + "\n\nCLimate: " + climate + "\nClimate Discription: " + climateDesc + "\n\nHabitablility: " + habitability + "\nHabitablility Discription: " + habDesc + "\n\nLandmasses: " + str(Landmasses) + "\nLandmass Discription: " + LandDesc)
+    
+#Used to generate MOONS
+#Same as Rock moons but without orbital features
+#Maybe Add GAS moons? (pretty gay)
+#ALWAYS displays above planet that it is orbiting
+#possibly change it to be in the orbital feature but that would be right in the middle of the planets inforamtion
+def moonCreation(pbody,Location):
+    bodyRoll = random.randint(1,10)
+    #rolls a d10 for the body 
+    #gets the body type of a rock planet
+    if pbody == "Low-Mass":
+        bodyRoll = 1
+    elif pbody == "Small":
+        if bodyRoll >= 2:
+            bodyRoll = 2
+    elif pbody == "Small and Dense":
+        if bodyRoll >= 4:
+            bodyRoll = 4
+    elif pbody == "Large":
+        if bodyRoll >= 7:
+            bodyRoll = 7
+    elif pbody == "Large and Dense":
+        if bodyRoll >= 8:
+            bodyRoll = 8
+    if 1 == bodyRoll:
+        body = "Low-Mass"
+        #another set of unending descriptions
+        bodyDesc = "The world is even lower in mass than its small size would suggest. It is likely comprised of light materials, \nor it has large pockets of trapped gas making up much of its volume. \nApply -7 to the result of any roll on Table 1-7: Gravity. Generate Resources and Environments as if the world was Small. \nMineral Resource deposits cannot exceed Limited in abundance."
+        #-7 to gravity
+        gravityRoll = random.randint(1,10)-7
+    elif 2 == bodyRoll or bodyRoll == 3:
+        body = "Small"
+        bodyDesc = "This world lacks the mass and size to support significant gravity or resources. Apply -5 to the result of anyroll on Table 1-7: Gravity."
+        #-5 to gravity
+        gravityRoll = random.randint(1,10)-5
+    elif 4 == bodyRoll:
+        body = "Small and Dense"
+        bodyDesc = "The shrunken silhouette of this Planet belies the strength of its gravity well and the richness of its crust. Generate Resources and Environments as if the world was Small. \nAdd +10 to the result of any on Table 1-19: Resource Abundance for any Mineral Resources"
+        #+5 to Resource Abundance
+        gravityRoll = random.randint(1,10)
+    elif 5 == bodyRoll or bodyRoll <= 7:
+        body = "Large"
+        bodyDesc = "Worlds of this size can range across a vast spectrum of possible types."
+        #NOTHING
+        gravityRoll = random.randint(1,10)
+    elif 8 == bodyRoll:
+        body = "Large and Dense"
+        bodyDesc = "Though impressive in volume, the mass of this world is, in fact, compressed significantly. Add +5 to the result of any roll on Table 1-7: Gravity. \nGenerate Resources and Environments as if the world was Large. \nAdd +10 to the result of any roll on Table 1–19: Resource Abundance for any Mineral Resources"
+        #+5 to gravity and +10 to Resouce Abundance, Generate as if world was large
+        gravityRoll = random.randint(1,10)+5
+    elif 9 == bodyRoll or bodyRoll == 10:
+        body = "Vast"
+        bodyDesc = " Huge and voluminous, worlds of this type strain the upper edges of the possible size for a single world. \nSuch Planets tend to be of middling density, as they are already more massive than is common. \nAdd +4 to the result of any roll on Table 1-7: Gravity."
+        #+4 to gravity 
+        gravityRoll = random.randint(1,10)+4
+    #makes sure gravityRoll is not negative
+    if gravityRoll < 1:
+        gravityRoll = 1
+    if 1 == gravityRoll or gravityRoll == 2:
+        gravity = "Low Gravity"
+        gravityDesc = " Apply -10 to any roll on Table 1-8: Orbital Features. Apply -2 to any roll on Table 1-9: Atmospheric Presence. \nIt follows all the rules for Low Gravity Worlds (see page 269 of the ROGUE TRADER Core Rulebook)."
+        #Follow low Gravity rules
+        #-2 to rolls on atomspheric presence  
+        atmosphericPresnceRoll = random.randint(1,10)-2 #rolls for what the atmospheric presnce is
+    elif 3 == gravityRoll or gravityRoll <= 8:
+        gravity = "Normal Gravity"
+        gravityDesc = "This Planet's gravity is roughly Terran Standard."
+        #NOTHING
+        atmosphericPresnceRoll = random.randint(1,10) #rolls for what the atmospheric presnce is
+    elif gravityRoll >= 9:
+        gravity = "High Gravity"
+        gravityDesc = "Add +10 to any roll on Table 1-8: Orbital Features. Add +1 to the roll on Table 1-9: Atmospheric Presence. \nThis Planet follows all the rules for High Gravity Worlds (see page 269 of the ROGUE TRADER Core Rulebook)."
+        #+10 to rolls on orbital features
+        #+1 to rolls on Atmosheric Presence
+        #Follow High Gravity rules
+        atmosphericPresnceRoll = random.randint(1,10)+1 #rolls for what the atmospheric presnce is
+    #Used to generate the atmoshere of the planet
+    if atmosphericPresnceRoll <= 1:
+        Atmosphere = "None :("
+        atmosphereDesc = "The Planet has no atmosphere, or it has one so thin as to be effectively nonexistent. \nActivity on the Planet is treated as being in vacuum, as covered on pages 262-263 of the ROGUE TRADER Core Rulebook. \nNormally, this means that there is no need to roll on Table 1-10: Atmospheric Composition"
+    elif 2 == atmosphericPresnceRoll or atmosphericPresnceRoll <= 4:
+        Atmosphere = "Thin"
+        atmosphereDesc = " The Planet's atmosphere is weak, but avoids the problems of an actual vacuum. \nTests to avoid harm from a Toxic or Corrosive atmosphere are made at a +10 bonus. However, the lack of air makes strenuous activity difficult. \nAny time an Explorer relying on the outside air gains Fatigue, he gains the normal amount plus one additional level of Fatigue instead."
+    elif 5 == atmosphericPresnceRoll or atmosphericPresnceRoll <= 9:
+        Atmosphere = "Moderate"
+        atmosphereDesc = "Atmospheres in this range produce no ill effects due to lack or overabundance of air, though they can still be Toxic or Corrosive"
+    elif atmosphericPresnceRoll >= 10:
+        Atmosphere = "Heavy"
+        atmosphereDesc = " A thick blanket of air presses down on the Planet, coming just short of smothering those beneath it. This oppressive weight imposes a -5 penalty on Strength or Toughness Tests, at the GM's discretion. \nTests to avoid harm from a Toxic or Corrosive Atmosphere are made at a -10 penalty. If the atmosphere is breathable, the thickness of the air makes it difficult to take in. \nA full hour of relying on such an atmosphere for air inflicts a single level of Fatigue. This effect is not cumulative, no matter how long a character relies on the air. \nHowever, recovery from this level of Fatigue cannot occur while relying on such an atmosphere." 
+
+    #Checks to see if there is an Atmoshpere
+    if Atmosphere == "None :(":
+        atmosphericComp = "None No Atmosphere"
+        atmoshericCompDesc = "None No Atmoshere"
+    #if Atmoshpere
+    #Does an Atmosheric Composition set and implements it
+    else:    
+        #Rolls for Atmospheric Composition
+        atmosphericCompRoll = random.randint(1,10)
+        if atmosphericCompRoll == 1:
+           atmosphericComp = "Deadly"
+           atmoshericCompDesc = "An atmosphere of this sort is little more than a vast acid bath. \nAnyone not protected by a full environmental seal suffers 1d5+1 Damage each Round that ignore Toughness Bonus and Armour. \nIf the atmosphere is also Heavy, it wears away at resistance, breaking into environmental seals after 1d10+2 hours."
+           #if heavy atmoshpere breaks environmental seal after 1d10+2 hours
+           #maybe add the 1d5+1 and 1d10+2 later if needed
+        elif atmosphericCompRoll == 2:
+            atmosphericComp = "Corrosive"
+            atmoshericCompDesc = "This atmosphere is both poisonous to breathe and deadly on any sort of contact. \nAnyone not protected by a full environmental seal must make a Difficult (-10) Toughness Test each Round, or suffer 1d5 Damage that ignores Armour and Toughness Bonus. \nContinued exposure results in suffocation, as per page 261 of the ROGUE TRADER Core Rulebook."
+        elif 3 == atmosphericCompRoll or atmosphericCompRoll <= 5:
+            atmosphericComp = "Toxic"
+            atmoshericCompDesc = "Poisonous gases and vapours fill the Planet's atmosphere. \nSimply breathing the air requires a Challenging (+0) Toughness Test each Round to avoid suffering 1 Damage that ignores Toughness Bonus and Armour. \nAdditionally, continued exposure results in suffocation, as per the rules on page 261 of the ROGUE TRADER Core Rulebook."
+        elif 6 == atmosphericCompRoll or atmosphericCompRoll == 7:
+            atmosphericComp = "Tainted"
+            atmoshericCompDesc = "Though capable of sustaining human life, this atmosphere is not entirely safe, stained by trace elements of toxins. \nThough it does not directly affect the Explorers, it might influence the viability or costs of long-term colonisation"
+        elif atmosphericCompRoll >= 8:
+            atmosphericComp = "Pure"
+            atmoshericCompDesc = "The atmosphere is entirely safe for humans and most other common life forms to breathe."
+    
+    #No atmoshpere changes how climites work
+    if Atmosphere == "None :(":
+        if Location == "Inner Cauldron":
+            #creates a climate and its description
+            climate = "Burning Moon"
+            climateDesc = " A fierce heat blankets the Planet in its entirety. The heat usually recedes at night, but it is likely still too warm for comfort. \nThe entire Planet is affected by extreme heat. Tests made to resist the heat are Very Hard (–30)."
+        elif Location == "Outer Reaches":
+            #creates a climate and its description
+            climate = "Ice Moon"
+            climateDesc = "The Planet is frozen, from pole to pole. The entire Planet is affected by extreme cold. Tests made to resist the cold are Very Hard (-30)."
+        else:
+            coin = random.randint(1,2)
+            if coin == 1:
+                #creates a climate and its description
+                climate = "Burning Moon"
+                climateDesc = " A fierce heat blankets the Planet in its entirety. The heat usually recedes at night, but it is likely still too warm for comfort. \nThe entire Planet is affected by extreme heat. Tests made to resist the heat are Very Hard (–30)."
+            else:
+                #creates a climate and its description
+                climate = "Ice Moon"
+                climateDesc = "The Planet is frozen, from pole to pole. The entire Planet is affected by extreme cold. Tests made to resist the cold are Very Hard (-30)."
+    else:
+        if Location == "Inner Cauldron":
+            climateRoll = random.randint(1,10)-6
+        elif Location == "Outer Reaches":
+            climateRoll = random.randint(1,10)+6
+        else:
+            climateRoll = random.randint(1,10)
+        #Generates the rest of the climate infromation
+        if climateRoll <= 0:
+            climate = "Burning Moon"
+            climateDesc = "A fierce heat blankets the Planet in its entirety. The heat usually recedes at night, but it is likely still too warm for comfort. \nThe entire Planet is affected by extreme heat. Tests made to resist the heat are Very Hard (–30)."
+        elif 1 == climateRoll or climateRoll <= 3:
+            climate = "Hot Moon"
+            climateDesc = "Most of this Planet is dangerously hot, but various regions can be found with more moderate microclimates. \nOutside of these sheltered regions, the entire Planet is affected by extreme heat. \nTests made to resist the heat generally range from Challenging (+0) to Hard (–20). \nIn some cases, the sheltered regions are also afflicted by extreme heat, but of a less severe degree than the rest of the Planet."
+        elif 4 == climateRoll or climateRoll <= 7:
+            climate = "Temperate Moon"
+            climateDesc = "Temperate Planets are exclusively found in or near a system’s Primary Biosphere. They might contain regions of either extreme heat or extreme cold, and in many cases, have some of both. \nThe Tests made to resist temperature extremes on these Planets rarely exceed Difficult (–10)."
+        elif 8 == climateRoll or climateRoll <= 10:
+            climate = "Cold Moon"
+            climateDesc = " Most of this Planet is dangerously cold, but various regions can found with more moderate microclimates. \nOutside of these sheltered regions, the entire Planet is affected by extreme cold. \nTests made to resist the heat generally range from Challenging (+0) to Hard (–20). \nIn some cases, the sheltered regions are also afflicted by extreme cold, but of a less severe degree than the rest of the Planet."
+        elif climateRoll >= 11:
+            climate = "Ice Moon"
+            climateDesc = "The Planet is frozen, from pole to pole. The entire Planet is affected by extreme cold. Tests made to resist the cold are Very Hard (-30)."
+        #can be changed at DMS descresion to allow bad atmoshere planets to be habitable
+        #this rolls for Habitability
+    habRoll = 100
+    if atmosphericComp == "Pure" or atmosphericComp == "Tainted":
+        if climate == "Cold Moon" or climate == "Hot Moon":
+            habRoll = random.randint(1,10)-2
+        elif climate == "Ice Moon" or climate == "Burning Moon": #also makes sure habroll doesnt get better than a 3
+            habRoll = random.randint(1,10)-7
+            if habRoll > 3:
+                 habRoll = 3
+        else:
+                 habRoll=random.randint(1,10)
+    else:
+         #used to Initialize in case planet not habitable
+        habRoll = 30 #just to initialize variable (habroll of 3000 not obtainable normally) 
+    if habRoll <= 1:
+        habitability = "Inhospitable"
+        habDesc = "There is no life or water to be found on this Moon."
+    elif habRoll == 2 or habRoll == 3:
+        habitability = "Trapped Water"
+        habDesc = "There is water on this Moon, but it is in a form that requires processing before it can be used or consumed. \nIt might be frozen or have boiled away to vapour on Moons with extreme climates. \nAlternatively, the water could be locked away in deep channels underground, or contaminated with other materials."
+    elif habRoll == 4 or habRoll == 5:
+        habitability = "Liquid Water"
+        habDesc = "Liquid water is accessible on the Moon's surface, but no native life has arisen to make use of it."
+    elif habRoll == 6 or habRoll == 7:
+        habitability = "Limited Ecosystem"
+        habDesc = "The Moon has native life of a limited variety. It could be that this Moon’s species have not advnced beyond basic proto-biology, \nor their spread across the Moon was restricted by local conditions. This might also indicate a Moon on the decline, or recovering from a devastating natural disaster."
+    elif habRoll >= 8 and habRoll < 30:
+        habitability = "Verdant"
+        habDesc = "The Moon has a thriving ecosystem. A variety of species can be found almost anywhere on the Moon."
+    elif habRoll == 30: #Change if you are DM and want a habitable planet with bad or no atmoshere
+        habitability = "BAD ATMOSHERE :("
+        habDesc = "NONE"
+    else:
+        habitability = "Error generating habitability"
+        habDesc = "Error generating habitability"
+    #Rolls for landmass
+    landROll = random.randint(1,10)
+    if landROll >= 8:
+        Landmasses = random.randint(1,5)
+        LandDesc = "Moon has " + str(Landmasses) + " Continent/s or Archipelegoes with a GM's discretion of small islands"
+    elif landROll >= 4 and habRoll >= 4:
+        Landmasses = random.randint(1,5)
+        LandDesc = "Moon has  " + str(Landmasses) + " Continent/s or Archipelegoes with a GM's discretion of small islands"
+    elif habRoll >= 4:
+        Landmasses = 1
+        LandDesc = "Moon has a single main landmass with rivers, streams and lakes"
+    else:
+        Landmasses = 1
+        LandDesc = "Yep thats a Rock Floating in space"
     #CHANGE orbital features to make more sense if it looks like shit (it will)
     #Find a way to get it so that orbital features and orbital feature description are together
     #rare chance that Habitability wont get filled out (It was because it was one line over in an else statement that only gets filled out when no atmoshere)
-    return print("Body: "+ body + "\nBody Description: "+ bodyDesc + "\n\nGravity: "+ gravity + "\nGravity Description: " + gravityDesc + "\n\nOrbital Feature: "+"\nOrbital Feature: ".join(orbitalFeature) + "\n\n".join(orbitalFeatDESC) + "\n\nAtmoshere: " + Atmosphere + "\nAtmoshere Description: " + atmosphereDesc + "\n\nAtmosheric Composition: "+ atmosphericComp+ "\nAtmosheric Compositon Description: "+ atmoshericCompDesc + "\n\nCLimate: " + climate + "\nClimate Discription: " + climateDesc + "\n\nHabitablility: " + habitability + "\nHabitablility Discription: " + habDesc + "\n\nLandmasses: " + str(Landmasses) + "\nLandmass Discription: " + LandDesc)
+    return print("MOON GENERATED LETS GOOOOOO\nBody: "+ body + "\nBody Description: "+ bodyDesc + "\n\nGravity: "+ gravity + "\nGravity Description: " + gravityDesc + "\n\nAtmoshere: " + Atmosphere + "\nAtmoshere Description: " + atmosphereDesc + "\n\nAtmosheric Composition: "+ atmosphericComp+ "\nAtmosheric Compositon Description: "+ atmoshericCompDesc + "\n\nCLimate: " + climate + "\nClimate Discription: " + climateDesc + "\n\nHabitablility: " + habitability + "\nHabitablility Discription: " + habDesc + "\n\nLandmasses: " + str(Landmasses) + "\nLandmass Discription: " + LandDesc + "\nEND OF MOON GENERATION\n\n\n")
     
+#Uses a Gas Planet, generates its body, gravity, orbital Features
+# #Used to generate Gas Planets
+#Find Way to get generation to look cleaner with the moons situation perferably put it into a file or something
+#Find way to get Orbital Feature not to dupe don't understand why it dupes
+def gasPlanetCreation(Location):
+    bodyRoll = random.randint(1,10)
+    #roll d10 to gen a body
+    #generates the body
+    mLocation = Location
+    if bodyRoll <= 2:
+        body = "Gas Dwarf"
+        bodyDesc = "Although much smaller than the typical world of this sort, a Gas Dwarf is still considerably more massive than most rocky Planets. \nApply –5 to the result of any roll on Table 1–7: Gravity."
+        #-5 to gravity gen
+        gravRoll=random.randint(1,10)-5
+    elif bodyRoll <= 8:
+        body = "Gas Giant"
+        bodyDesc = "Typical gas giants are vastly more massive than almost any other world, and tend to have correspondingly powerful gravitational effects"
+        gravRoll=random.randint(1,10)
+    else:
+        body = "Massive Gas Giant"
+        bodyDesc = "The largest gas giants can rival weaker stars in size and mass, with some of them having some degree of kinship with such bodies. \nAdd +3 to the result of any roll on Table 1–7: Gravity. In addition, any Massive= Gas Giant not in the Inner Cauldron has a chance of being one of these titans. \nWhen generating a Massive Gas Giant, roll 1d10; on a result of 8 or higher, count the result of the roll made for it on Table 1–7: \nGravity as a result of 10, and its moons are generated as if they were one Solar Zone closer to their star. Otherwise, treat it normally"
+        #+3 to gravity
+        rollMGG = random.randint(1,10)
+        if rollMGG >= 8:
+            if rollMGG == 10 and Location != "Inner Cauldron":
+                if Location == "Outer Reaches":
+                    mLocation = "Primary Bioshpere"
+                else:
+                    mLocation = "Inner Cauldron"
+            gravRoll = random.randint(1,10)+rollMGG+3
+        gravRoll=random.randint(1,10)+3
+    #Gets the gravity generation  
+    if gravRoll <= 2:
+        gravity = "Weak"
+        gravDesc = "Though puny by the standards of gas giants, this gravity well is stronger than that of almost any solid Planet. \nAdd +10 to any roll on Table 1–8: Orbital Features."
+        #+10 Orbital Features
+        orbitRoll = random.randint(1,10)-5
+    elif gravRoll <= 6:
+        gravity = "Strong"
+        gravDesc = "This gas giant has the impressive gravity well common to such worlds. \nAdd +15 to any roll on Table 1–8: Orbital Features."
+        #+15 Orbital Features
+        orbitRoll = random.randint(1,10)-3
+    elif gravRoll <= 9:
+        gravity = "Powerful"
+        gravDesc = "The influence of this gravity well extends well beyond the immediate presence of its source, drawing in whatever passes by. \nAdd +20 to any roll on Table 1–8: Orbital Features."
+        #+20 Orbital Features
+        orbitRoll = random.randint(1,10)+2
+    else:
+        gravity = "Titanic"
+        gravDesc = "Add +10 to any roll on Table 1–8: Orbital Features. Add +1 to the roll on Table 1–9: Atmospheric Presence. \nThis Planet follows all the rules for High Gravity Worlds (see page 269 of the ROGUE TRADER Core Rulebook)."
+        #+30 Orbital Features
+        orbitRoll = random.randint(1,5)+random.randint(1,5)+random.randint(1,5)+3
+        #rolls 3d5+3
+    #Checks to see if orbit roll < 1 if so sets to 1
+    if orbitRoll < 1:
+        orbitRoll = 1
+    orbitalFeature = [] #list of orbital features
+    orbitalFeatDESC = [] #Description of orbital feature
+    #generation of orbital features
+    while orbitRoll >= 1:
+        if gravity == "Weak":
+            featureRoll = random.randint(1,100)+10
+        elif gravity == "Strong":
+            featureRoll = random.randint(1,100)+15
+        elif gravity == "Powerful":
+            featureRoll = random.randint(1,100)+20
+        else: 
+            featureRoll = random.randint(1,100)+30
+        #gets the orbit features
+        if featureRoll <= 20:
+            orbitalFeature.append("No Feature")
+            orbitalFeatDESC.append("No notable features are added to the Gas Giant’s orbit")
+        elif featureRoll <= 35:
+            orbitalFeature.append("Planetary Rings (Debris)")
+            orbitalFeatDESC.append(" A narrow band of asteroids or chunks of ice extends out around the Gas Giant. \nWhile the limited spread means that avoiding the field requires a detour, \na vessel with cause to pass directly through the ring must make a Challenging (+0) Pilot (Space Craft)+Manoeuvrability Test as if passing through an Asteroid Field, as described on pages 226–227 of the ROGUE TRADER Core Rulebook. \nMultiple instances of this Orbital Feature increase the size of the rings. \nTests to pass through safely suffer a –10 penalty for each additional instance of this Orbital Feature.")
+        elif featureRoll <= 50:
+            orbitalFeature.append("Planetary Rings (Dust)")
+            orbitalFeatDESC.append("A wide ring of fine particles encircles the gas giant. \nWhile the limited spread prevents it from becoming a navigational hazard like a true dust cloud or nebula, \nany Tests using the ship’s auger arrays on a target within, on, or directly through the ring are two steps more difficult. \nMultiple instances of this Orbital Feature increase the size of the existing Planetary Rings instead of adding extra sets of Rings. \nIncrease the penalty to use augers through or within the Rings by an additional –5 for every two additional instances of this Feature")
+        elif featureRoll <= 85:
+            orbitalFeature.append("Lesser Moon")
+            rollMin = random.randint(1,10)
+            if rollMin >= 6:
+                #Roll 5d10+5 for abundance
+                minRec = mineralResource()
+                abundRoll = random.randint(1,10)+random.randint(1,10)+random.randint(1,10)+random.randint(1,10)+random.randint(1,10)+5
+                abundance = resourceAbundance(abundRoll)
+            else:
+                minRec = "None :("
+                abundance = "None no Minerals"
+            orbitalFeatDESC.append("An orbital body somewhere between an extremely large asteroid and a very small moon orbits the Planet. \nIt has its own extremely limited gravity well, allowing low-gravity travel across the surface, as described on page 269 of the ROGUE TRADER Core Rulebook. \nWhen generating a Lesser Moon, roll 1d10; on a result of 6 or higher, it houses sufficient mineral wealth to count as a Resource. \nRoll once on Table 1–20: Mineral Resources and determine its Abundance by rolling 5d10+5." + "\n\nMineral Resource of moon: "+ minRec + "\n\nAbundance of Resource on moon: " + abundance)
+        else:
+            orbitalFeature.append("Moon")
+            orbitalFeature.append("A true moon is generated as a Planet, using the rules for Planet Creation (see page 19). \nUnder normal circumstances, a moon cannot have a higher Planetary Body than the world around which it orbits. \nIn addition, a moon never generates its own Orbital Features.")
+            #little confused to how this works with gas just letting all values go through
+            moonCreation(body,mLocation)
+        orbitRoll -= 1
+    #combines orbit and features ?
+    combinedOrbitFeatures = [item for pair in zip(orbitalFeature, orbitalFeatDESC) for item in pair]
+    combinedOrbitFeatures += orbitalFeature[len(orbitalFeatDESC):] + orbitalFeatDESC[len(orbitalFeature):]
+    return print("\nBody: "+ body+ "\nBody Description: "+ bodyDesc + "\n\nGravity: "+ gravity + "\n\nGravity Description: "+ gravDesc + "\n\nOrbital Feature: ".join(combinedOrbitFeatures))
+
+
+
+#used to generate mineral Resources
+def mineralResource():
+    minerRoll = random.randint(1,10)
+    switch = {
+        1: "Industrial Metal",
+        2: "Industrial Metal",
+        3: "Industrial Metal",
+        4: "Industrial Metal",
+        5: "Ornamental",
+        6: "Ornamental",
+        7: "Ornamental",
+        8: "Radioactive",
+        9: "Radioactive",
+        10:"Exotic Metals",
+    }
+    return switch.get(minerRoll)
+
+#used to generate resource abundance
+def resourceAbundance(roll):
+    if roll <= 15:
+        abundance = "Minimal"
+        abunDesc = "There are trace amounts of the resource in question, but not enough to sustain an ongoing extraction operation such as a dedicated mining colony. \nShort-term operations are likely to have the best returns upon investment."
+    elif roll <= 40: 
+        abundance = "Limited"
+        abunDesc = "A modest but worthwhile supply of the Resource is present, \nand a sustained operation could focus on exploiting this resource alone for several years before needing to find other sources of income."
+    elif roll <= 65:
+        abundance = "Sustainable"
+        abunDesc = "Extensive reserves exist to ensure that the Resource remains a viable source of income for some time."
+    elif roll <= 85:
+        abundance = "Significant"
+        abunDesc = "The Resource is both rich and accessible, allowing for a wide variety of approaches in making use of it."
+    elif roll <= 98:
+        abundance = "Major"
+        abunDesc = " The Resource’s potential value is vast, both as an immediate commodity and as a long term reserve. \nUnfortunately, significant investment is likely to be required to properly benefit from that potential, and there is enough of a supply to encourage competition."
+    else:
+        abundance = "Plentiful"
+        abunDesc = "The reserves of this Resource are seem limitless. \nThough deposits of this value have been exhausted by the Imperium before, \nit would take at least a decade to deplete this resource, barring the most aggressive efforts."
+    return "Abundance Rating: " + abundance + "\nAbundance Description: " + abunDesc
+
+
 
 def main():
     #print(starType())
@@ -696,6 +1065,10 @@ def main():
     #Location = "Outer Reaches"
     Location = "CENTER" 
     print(rockPlanetCreation(Location))
+    #print(moonCreation("Small",Location))
+    #print(mineralResource())
+    #print(resourceAbundance(15))
+    #print(gasPlanetCreation(Location))
 
 
 
