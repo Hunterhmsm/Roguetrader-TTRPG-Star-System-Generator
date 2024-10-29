@@ -9,8 +9,14 @@
 import random
 import numpy
 from generation import amountOfSystemFeatures, systemFeatures, starType, innerCauldronElements
+from PyQt5.QtWidgets import QApplication
+from UI import StarGeneratorUI
+import sys
 
 def main():
+    #sets up UI basically
+    app = QApplication(sys.argv)
+
     #gets the system features and stores them in a list
     features = [] #list of system features
     systemFeaturesNumber = amountOfSystemFeatures() #1d5-2
@@ -26,13 +32,18 @@ def main():
     #gets inner cauldron elements
     innerCauldron = innerCauldronElements(typeOfStar)
 
+    #UI DEBUGGING STUFF HERE
+    #-----------------------
+    def generateStar():
+        startype = starType()  #call the starType function from generation.py
+        window.updateLabel(startype)  #update the UI label
 
-    #debugging
-    for feature in features:
-        print("System Feature" , feature)
-    print("Star" , typeOfStar)
-    for element in innerCauldron:
-        print("Inner Cauldron Element", element)
+    #create the UI and pass the callback to the button
+    window = StarGeneratorUI(generateStar)
+    window.setThreeFourthsScreenSize()
+    window.show()
+
+    sys.exit(app.exec_())
 
 if __name__ == "__main__":
     main()
