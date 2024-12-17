@@ -9,6 +9,8 @@
 import random
 import numpy
 from generation import amountOfSystemFeatures, systemFeatures, starType, innerCauldronElements
+from UI import StarGeneratorUI
+import sys
 
 def main():
     #gets the system features and stores them in a list
@@ -27,12 +29,13 @@ def main():
     innerCauldron = innerCauldronElements(typeOfStar)
 
 
-    #debugging
-    for feature in features:
-        print("System Feature" , feature)
-    print("Star" , typeOfStar)
-    for element in innerCauldron:
-        print("Inner Cauldron Element", element)
+        
+    #create the UI and pass the callback to the button
+    window = StarGeneratorUI(generateStar)
+    window.setThreeFourthsScreenSize()
+    window.show()
+
+    sys.exit(app.exec_())
 
 if __name__ == "__main__":
     main()

@@ -24,15 +24,15 @@ def systemFeatures():
 
     features = {      # dictonary of features based on roll
        1: "Bountiful",
-       2: "Gravity_Tides",
+       2: "Gravity Tides",
        3: "Haven",
-       4: "Ill_Omened",
-       5: "Pirate_Den",
-       6: "Ruined_Empire",
+       4: "Ill Omened",
+       5: "Pirate Den",
+       6: "Ruined Empire",
        7: "Starfarers",
-       8: "Stellar_Anomoly",
-       9: "Warp_Stasis",
-       10: "Warp_Turbulence"
+       8: "Stellar Anomoly",
+       9: "Warp Stasis",
+       10: "Warp Turbulence"
    }
     #return feature based on roll
     return features[systemFeature]
@@ -102,21 +102,21 @@ def innerCauldronElements(star):
     while amount > 0:
         roll100 = random.randint(1, 100)
         if 1 <= roll100 <= 20:
-            element = "No_Feature"
+            element = "No Feature"
         elif 21 <= roll100 <= 29:
-            element = "Asteroid_Cluster"
+            element = "Asteroid Cluster"
         elif 30 <= roll100 <= 41:
-            element = "Dust_Cloud"
+            element = "Dust Cloud"
         elif 42 <= roll100 <= 45:
-            element = "Gas_Giant"
+            element = "Gas Giant"
         elif 46 <= roll100 <= 56:
-            element = "Gravity_Riptide"
+            element = "Gravity Riptide"
         elif 57 <= roll100 <= 76:
             element = "Planet"
         elif 77 <= roll100 <= 88:
-            element = "Radiation_Bursts"
+            element = "Radiation Bursts"
         elif 89 <= roll100 <= 100:
-            element = "Solar_Flares"
+            element = "Solar Flares"
         #add chosen element to list of elements
         elements.append(element)
         amount -= 1
