@@ -1,5 +1,6 @@
 from PyQt5.QtWidgets import QWidget, QVBoxLayout, QHBoxLayout, QPushButton, QLabel, QListWidget, QSplitter, QListWidgetItem, QApplication
 from PyQt5.QtCore import Qt
+from generationOutput import generation
 
 class StarGeneratorUI(QWidget):
     def __init__(self, generate_callback):
@@ -18,6 +19,20 @@ class StarGeneratorUI(QWidget):
 
         #set up the layout and widgets
         layout = QVBoxLayout()
+
+
+        #setting up the sidebar
+        sidebar = QWidget()
+        sidebar.setFixedWidth(200)
+        sidebar_layout = QVBoxLayout(sidebar)
+
+        label = QLabel("Sidebar Menu")
+        label.setAlignment(Qt.AlignCenter)
+        sidebar_layout.addWidget(label)
+
+        sidebar_layout.addStretch()
+        sidebar.setStyleSheet("background-color: #2E3440; color: white;")
+        layout.addWidget(sidebar)
 
         #custom style labels
         self.label = QLabel("Click 'Generate' to get a star type", self)
