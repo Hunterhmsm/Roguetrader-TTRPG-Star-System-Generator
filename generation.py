@@ -1050,7 +1050,66 @@ def resourceAbundance(roll):
         abunDesc = "The reserves of this Resource are seem limitless. \nThough deposits of this value have been exhausted by the Imperium before, \nit would take at least a decade to deplete this resource, barring the most aggressive efforts."
     return "Abundance Rating: " + abundance + "\nAbundance Description: " + abunDesc
 
+#used to generate Organic Resources
+def organicResources():
+    organicRoll = random.randint(1,10)
+    switch = {
+        1: "Curative",
+        2: "Curative",
+        3: "Juvenat Compound",
+        4: "Juvenat Compound",
+        5: "Toxin", 
+        6: "Toxin",
+        7: "Vivid Accessory",
+        8: "Vivid Accessory",
+        9: "Vivid Accessory",
+        10: "Exotic Compound",
+    }
+    return switch.get(organicRoll)
 
+#used to generate the Xenos Ruins
+def xenosRuins():
+    xenosRuinedRoll = random.randint(1,10)
+    switch = {
+        1: "The Ruins belonged to an undiscovered species",
+        2: "The Ruins belonged to an undiscovered species",
+        3: "The Ruins belonged to an undiscovered species",
+        4: "The Ruins belonged to an undiscovered species",
+        5: "Eldar Ruins",
+        6: "Eldar Ruins",
+        7: "Egarian Ruins",
+        8: "Yu'Vath Ruins",
+        9: "Ork Ruins",
+        10: "Kroot Ruins",
+    }
+    return switch.get(xenosRuinedRoll)
+
+#used to generate Landmarks
+def genLandmark():
+    LandmarkRoll = random.randint(1,100)
+    if (LandmarkRoll <=20):
+        return "Canyon"
+    elif (LandmarkRoll <= 35):
+        return "CaveNetwork"
+    elif (LandmarkRoll <= 45):
+        return "Crater"
+    elif (LandmarkRoll <= 65):
+        return "Mountain"
+    elif (LandmarkRoll <= 75):
+        return "Valcano"
+    elif (LandmarkRoll <= 100):
+        # Because you can choose the landmark for this one 
+        # Gamble with the options with the choice to choose the outcome at the end.
+        gamble = random.randint(1,5)
+        switch ={
+            1: "Glacier",
+            2: "Inland Sea",
+            3: "Perpetual Storm",
+            4: "Reef",
+            5: "Whirlpool",
+        }
+        return switch.get(gamble) + "Or Choose for yourself Between \nGlacier \nInlandSea \nPerpetual Storm \nReef \nWhirlpool"
+    
 
 def main():
     #print(starType())
