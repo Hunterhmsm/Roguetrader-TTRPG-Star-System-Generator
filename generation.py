@@ -10,32 +10,42 @@ import random
 import array
 
 #determines the amount of system features
-def amountOfSystemFeatures():
-    int = random.randint(1,5) - 2
+#useless now
+#def amountOfSystemFeatures():
+    #int = random.randint(1,5) - 2
     
-    if int <= 0:
-        int = 1
-    return int
+   #if int <= 0:
+        #int = 1
+    #return int
 
 #generates the system feature
 def systemFeatures():
+    #initalizes the list of features
+    rolledFeatures = []
+    #determines amount of system features
+    featureCount = random.randint(1,5) - 2
     
-    systemFeature = random.randint(1, 10) # random int 1-10 assigned to systemFeature
+    if featureCount <= 0:
+        featureCount = 1
+    while featureCount > 0:
+        systemFeature = random.randint(1, 10) # random int 1-10 assigned to systemFeature
 
-    features = {      # dictonary of features based on roll
-       1: "Bountiful",
-       2: "Gravity Tides",
-       3: "Haven",
-       4: "Ill Omened",
-       5: "Pirate Den",
-       6: "Ruined Empire",
-       7: "Starfarers",
-       8: "Stellar Anomoly",
-       9: "Warp Stasis",
-       10: "Warp Turbulence"
-   }
+        features = {      # dictonary of features based on roll
+        1: "Bountiful",
+        2: "Gravity Tides",
+        3: "Haven",
+        4: "Ill Omened",
+        5: "Pirate Den",
+        6: "Ruined Empire",
+        7: "Starfarers",
+        8: "Stellar Anomoly",
+        9: "Warp Stasis",
+        10: "Warp Turbulence"
+    }
+        rolledFeatures.append(features[systemFeature])
+        featureCount -= 1
     #return feature based on roll
-    return features[systemFeature]
+    return rolledFeatures
 
 
 

@@ -1,6 +1,5 @@
 from PyQt5.QtWidgets import QWidget, QVBoxLayout, QHBoxLayout, QPushButton, QLabel, QListWidget, QSplitter, QListWidgetItem, QApplication
 from PyQt5.QtCore import Qt
-from generationOutput import generation
 
 class StarGeneratorUI(QWidget):
     def __init__(self, generate_callback):
@@ -24,13 +23,17 @@ class StarGeneratorUI(QWidget):
         #setting up the sidebar
         sidebar = QWidget()
         sidebar.setFixedWidth(200)
-        sidebar_layout = QVBoxLayout(sidebar)
+        self.sidebar_layout = QVBoxLayout(sidebar)
+        #default text
+        #and sidebar labels
+        self.sidebar_label_systemfeatures = QLabel("")
+        self.sidebar_label_star = QLabel("")
+        self.sidebar_label_systemfeatures.setAlignment(Qt.AlignCenter)
+        self.sidebar_label_star.setAlignment(Qt.AlignCenter)
+        self.sidebar_layout.addWidget(self.sidebar_label_systemfeatures)
+        self.sidebar_layout.addWidget(self.sidebar_label_star)
 
-        label = QLabel("Sidebar Menu")
-        label.setAlignment(Qt.AlignCenter)
-        sidebar_layout.addWidget(label)
-
-        sidebar_layout.addStretch()
+        self.sidebar_layout.addStretch()
         sidebar.setStyleSheet("background-color: #2E3440; color: white;")
         layout.addWidget(sidebar)
 
@@ -112,3 +115,20 @@ class StarGeneratorUI(QWidget):
 
         #set window size and pos
         self.setGeometry(left, top, width, height)
+
+    def updateSidebarStars(self, star):
+        self.sidebar_label_star.setText(star)
+    
+    def updateSidebarSystemFeatures(self, features):
+        for index in reversed(range(self.sidebar_layout.count())):
+            widget = self.sidebar_layout.itemAt(index).widget()
+            if widget is not None and widget.objectName().startswith("feature_label_"):
+                widget.deleteLater()
+
+        for index, feature in enumerate(features):
+            label = QLabel(feature)
+            label.setAlignment(Qt.AlignCenter)
+            label.setStyleSheet("color: white; font-size: 12px;")
+            label.setObjectName(f"feature_label_{index}")
+            self.sidebar_layout.addWidget(label)
+        self.sidebar_layout.addStretch()
