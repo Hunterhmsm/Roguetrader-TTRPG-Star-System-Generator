@@ -45,28 +45,8 @@ def floraType():
     }
     return switch.get(baseFTypeRoll)
 
-#The GM makes two rolls
-#on the appropriate section for the Flora Type (Passive, Active, or
-#Combatant), and one roll on the section that matches the type of
-#world the flora exists on (Death, Jungle, Ocean, or Temperate). If
-#the world or environment to which the flora strain is native does
-#not correspond to any of the tables, roll on the Temperate World
-#Species Traits section. Species from Death Worlds roll twice on the
-#Death World Traits section and apply the results of both rolls.
-#At the GM discretion, a highly evolved or unusual specimen
-#may be granted a free roll on the Exotic Species section.
-#aits
-#Dice Roll (1d10) Species Trait
-#1 Armoured
-#2 Deterrent
-#3 Frictionless
-#4 Sticky
-#5-6 Foul Aura (Soporific)
-#7-8 Foul Aura (Toxic)
-#9 Resilient
-#10 Roll on the Exotic Species Traits
-#section of this table. 
 
+#Chooses the traits for temperate world flora
 def TempWorldTrait():
     TempTraitRoll = random.randint(1,10)
     switch = {
@@ -83,6 +63,7 @@ def TempWorldTrait():
     }
     return switch.get(TempTraitRoll)
 
+#Chooses the traits for Jungle floura
 def JungleWorldSpeciesTrait(Type):
     while True:
         JungleTraitRoll = random.randint(1, 10)
@@ -107,7 +88,7 @@ def JungleWorldSpeciesTrait(Type):
                     continue  # Re-roll if it's a PassiveTrap
                 return "Venomous"
 
-#Find what re-roll means
+#Chooses the traits for Ocean floura
 def OceanWorldTrait(Type):
     while True:
         OceanTraitRoll = random.randint(1, 10)
@@ -132,6 +113,7 @@ def OceanWorldTrait(Type):
                     continue  # Re-roll if it's a PassiveTrap
                 return "Venomous"
 
+#Chooses the traits for Exotic Flora
 def ExoticSpeciesTrait():
     ExoticTraitRoll = random.randint(1,10)
     switch = {
@@ -148,6 +130,7 @@ def ExoticSpeciesTrait():
     }
     return switch.get(ExoticTraitRoll)
 
+#Chooses the traits for Death World Flora
 def DeathSpeciesTrait(Type):
     while True:
         DeathTraitRoll = random.randint(1, 10)
@@ -178,6 +161,7 @@ def DeathSpeciesTrait(Type):
                     continue  # Re-roll if it's a PassiveTrap
                 return "Uprooted Movement"
 
+#Chooses the traits for Combatent Species flora
 def CombatantSpeciesTrait():
     CombatantTraitRoll = random.randint(1,10)
     switch = {
@@ -194,6 +178,7 @@ def CombatantSpeciesTrait():
     }
     return switch.get(CombatantTraitRoll)
 
+#Chooses the traits for passive trap flora
 def PassiveTrapTrait():
     PassiveTraitRoll = random.randint(1,10)
     switch = {
@@ -210,6 +195,7 @@ def PassiveTrapTrait():
     }
     return switch.get(PassiveTraitRoll)
 
+#Chooses the traits for Active Trap flora
 def ActiveTrapTrait():
     ActiveTrapRoll = random.randint (1,10)
     switch = {
@@ -226,6 +212,7 @@ def ActiveTrapTrait():
     }
     return switch.get(ActiveTrapRoll)
 
+#Chooses the traits for Flora
 def floraSpeciesTraits(Type, worldType): 
     WorldTrait = []
     SpeciesTrait = []
@@ -251,11 +238,12 @@ def floraSpeciesTraits(Type, worldType):
         SpeciesTrait.append(CombatantSpeciesTrait()) 
     return print("World Traits: ", ", ".join(WorldTrait), "\nSpecies Traits: ", ", ".join(SpeciesTrait))
     
+##Chooses the Base for Beasts
 def faunaBase():
     faunaBaseRoll = random.randint(1,10)
     switch = {
-        1: "Avian Beast"
-        ,2: "Avian Beast",
+        1: "Avian Beast",
+        2: "Avian Beast",
         3: "Herd Beast",
         4: "Herd Beast",
         5: "Herd Beast",
@@ -267,6 +255,7 @@ def faunaBase():
     }
     return switch.get(faunaBaseRoll)
 
+#Chooses the Size for Beasts
 #Note VERMINOUS SWARM DOES NOT USE COMMENTED OUT STAT INCREASES
 def faunaSize(Base):
     if (Base == "Verminous Swarm"):
@@ -288,7 +277,7 @@ def faunaSize(Base):
     return switch.get(faunaSizeRoll)
         
               
-           
+#Chooses the traits for Exotic Beasts           
 def ExoticBeastTrait():
     ExoticBeastTraitRoll = random.randint(1,10)
     switch = {
@@ -305,6 +294,7 @@ def ExoticBeastTrait():
     }
     return switch.get(ExoticBeastTraitRoll)
 
+##Chooses the traits for Avian Beasts
 def AvianTrait():
     AvianTraitRoll = random.randint(1,10)
     switch = {
@@ -321,6 +311,7 @@ def AvianTrait():
     }
     return switch.get(AvianTraitRoll)
 
+#Chooses the traits for Herd Beasts
 def HerdBeastTrait():
     HerdBeastRoll = random.randint(1,10)
     switch = {
@@ -337,6 +328,7 @@ def HerdBeastTrait():
     }
     return switch.get(HerdBeastRoll)
 
+#Chooses the traits for Predator Beasts
 def PredatorBeastTrait():
     PredatorBeastRoll = random.randint(1,10)
     switch = {
@@ -353,6 +345,7 @@ def PredatorBeastTrait():
     }
     return switch.get(PredatorBeastRoll)
 
+#Chooses the traits for Scavenger Beasts
 def ScavengerBeastTrait():
     ScavengerBaestRoll = random.randint(1,10)
     switch = {
@@ -369,6 +362,7 @@ def ScavengerBeastTrait():
     }
     return switch.get(ScavengerBaestRoll)
 
+#Chooses the traits for Vermin Swarm beasts 
 def VerminSwarmTrait():
     VerminSwarmRoll = random.randint(1,10)
     switch = {
@@ -385,6 +379,7 @@ def VerminSwarmTrait():
     }
     return switch.get(VerminSwarmRoll)
 
+#Chooses the traits for Death world Beasts
 def DeathBeastTrait():
     DeathBeastRoll = random.randint(1,10)
     switch = {
@@ -401,6 +396,7 @@ def DeathBeastTrait():
     }
     return switch.get(DeathBeastRoll)
 
+#Chooses the traits for Desert Beasts
 def DesertBeastTrait():
     DesertBeastRoll = random.randint(1,10)
     switch = {
@@ -417,6 +413,7 @@ def DesertBeastTrait():
     }
     return switch.get(DesertBeastRoll)
 
+#Chooses the traits for Ice Beasts
 def IceBeastTrait():
     IceBeastRoll = random.randint(1,10)
     switch = {
@@ -433,6 +430,7 @@ def IceBeastTrait():
     }
     return switch.get(IceBeastRoll)
 
+#Chooses the traits for Jungle Beasts
 def JungleBeastTrait():
     JungleBeastRoll = random.randint(1,10)
     switch = {
@@ -449,6 +447,7 @@ def JungleBeastTrait():
     }
     return switch.get(JungleBeastRoll)
 
+#Chooses the traits for Ocean Beasts
 def OceanBeastTrait():
     OceanBeastRoll = random.randint(1,10)
     switch = {
@@ -465,6 +464,7 @@ def OceanBeastTrait():
     }
     return switch.get(OceanBeastRoll)
 
+#Chooses the traits for temperate Beasts
 def TemperateBeastTrait():
     TemperateBeastRoll = random.randint(1,10)
     switch = {
@@ -481,6 +481,7 @@ def TemperateBeastTrait():
     }
     return switch.get(TemperateBeastRoll)
 
+##Chooses the traits for Volcanic Beasts
 def VolcanicBeastTrait():
     VolcanicBeastRoll = random.randint(1,10)
     switch = {
@@ -497,6 +498,7 @@ def VolcanicBeastTrait():
     }
     return switch.get(VolcanicBeastRoll)
 
+#Generates the Traits for the Beasts
 def faunaBeastTraits(Base, WorldType):
     BaseTraits = []
     WorldBeastTraits = []
@@ -534,19 +536,455 @@ def faunaBeastTraits(Base, WorldType):
         WorldBeastTraits.append(TemperateBeastTrait())
     return print("World Beast Traits: ", ", ".join(WorldBeastTraits), "\nBase Beast Traits: ", ", ".join(BaseTraits))
 
+#Chooses a trait for the Xenos
+def PrimitiveXenosDesc():
+    PrimitiveXenosRoll = random.randint(1,5)
+    switch = {
+        1: "Deadly",
+        2: "Mighty",
+        3: "Resilient",
+        4: "Stealthy",
+        5: "Swift",
+    }
+    return switch.get(PrimitiveXenosRoll)
+
+#Chooses what the xenos look like
+def XenosMorphology():
+    XenosMorphologyRoll = random.randint(1,10)
+    switch = {
+        1: "Crawler",
+        2: "Flyer (6)",
+        3: "Hoverer (4)",
+        4: "Multiple Arms",
+        5: "Quadruped",
+        6: "Size (Hulking)",
+        7: "Size (Scrawny)",
+        8: "Humanoid, Size (Average)",
+        9: "Humanoid, Size (Average)",
+        10: "Humanoid, Size (Average)",
+    }
+    return switch.get(XenosMorphologyRoll)
+
+#Chooses the traits for the Xenos
+#This is a 1/4 chance to happen on top of Xenos Morphology
+def ExoticXenosPhysiology():
+    ExoticXeonosRoll = random.randint(1,10)
+    switch = {
+        1: "Armoured",
+        2: "Disturbing",
+        3: "Deathdweller",
+        4: "Lethal Defences",
+        5: "Disturbing",
+        6: "Warped",
+        7: "Darkling",
+        8: "Unkillable",
+        9: "Projectile Attack",
+        10: "Deterrent",
+    }
+    return switch.get(ExoticXeonosRoll)
+
+#Chooses the traits for the Xenos
+#this is also a 1/4 chance to happen 
+def UnusualXenosCom():
+    UnusualXenosComRoll = random.randint(1,5)
+    switch = {
+        1: "Intuitive Communicators", # The xenos race possesses the ability to understand and communicate with the Explorers without prior contact, whether through low-level telepathy, an uncanny ability to intuit body language, or other unusual means. Interaction Skills suffer no penalty, unless the Explorers take issue with this clearly unnatural power.
+        2: "Previous Contact", #Certain members of the xenos culture have adequate fluency in Low Gothic to allow use of Interaction Skills without penalties. The question of where they learned the language is likely to be an issue—the only Imperial contact such beings are likely to have had would be a rival Rogue Trader dynasty.
+        3: "Relic Civilisation", #The entire race speaks a debased form of Low Gothic, not unlike what a long-separated fragment of pre-Imperial civilisation might use. Mastering the idiosyncrasies of their variant might take a week or two, but unravelling the mystery of their language’s origin could be much more challenging...
+        4: "Simplistic", #The language of the xenos is simplicity itself—largely because their civilisation has little use for advanced concepts, and their communication has barely progressed beyond grunting. The language is learned for free after a week of interaction. Communication without fluency in the language treats Interaction Skills as Basic, but does not penalise them. However, even a trained speaker must pass a Speak Language test to get across advanced concepts and metaphors.
+        5: "Exotic", #The xenos communicate via elaborate mechanisms impossible to fully duplicate without their unique biology. Pheromones, pigmentation shifts, or body language beyond human physiology to replicate may play a part. Interaction Skills suffer an additional –10 penalty, whether the user trained in the language or not. Characters with the Polyglot Talent also suffer from this penalty, despite their unique abilities.
+    }
+    return switch.get(UnusualXenosComRoll)
+
+##Chooses the primitive Xenos social sturcture
+def PrimitiveXenosSocialStructures():
+    PrimitiveXenosSocialRoll = random.randint(1,10)
+    switch = {
+        1:"Agriculturalist", #The xenos have based their lifestyle around farming crops and herding local fauna. Such societies tend to be stable, if not outright peaceful. While many primitive xenos cultures have the tools to farm, this represents a culture where the herd or crop is the central cultural value. In some xenos cultures, the herd may even be a related species, or degenerate members of their own race.
+        2: "Agriculturalist", #The xenos have based their lifestyle around farming crops and herding local fauna. Such societies tend to be stable, if not outright peaceful. While many primitive xenos cultures have the tools to farm, this represents a culture where the herd or crop is the central cultural value. In some xenos cultures, the herd may even be a related species, or degenerate members of their own race.
+        3: "Hunter", #This race lives by their prowess in the hunt, supplementing lean seasons with foraging. They may know of agriculture and scorn it as weakness, or even have a physiology not far divorced from the predators they compete with for food. Explorers must take care not to present themselves as potential prey animals when dealing with such a culture.
+        4: "Feudal", #The xenos live in a society rigidly defined by oaths of loyalty. This could as easily refer to blood-bonds between feral chieftains as the vows made by vassals of an alien lord aping true Imperial nobility. Such societies are tight-knit, but often divided along multiple lines that can be exploited to gain influence over one lord or another.
+        5: "Raiders", #While some section of the xenos culture is devoted to the production or acquisition of food and other necessities, true status in this society belongs to the warriors. Crops grown are valued less than those seized from others, and only strength is respected. A Rogue Trader can easily impress such aliens with his military might, but must be careful not to let himself seem too dependent on his tools or servants.
+        6: "Nomadic", #The race is constantly on the move, travelling along with migratory herds, moving from area to area as they exhaust local food supplies or deplete the land, driven to keep roaming perhaps due to local weather conditions. Explorers may find it impossible to deal with them unless they are willing to also move with the tribes.
+        7: "Hivemind", #Linked together in a network of pheromones, neurological energies, or some other mechanism, the xenos think and speak with one mind. There are no actual individuals in the race, and their “representative” might change daily as a new member is chosen to interact with the Explorers. This race views the death of a member as nothing more than a mild nuisance, but will also view a slight against one as a slight against them all.
+        8: "Scavengers", #The xenos make their living by picking through the ruins of an older civilisation. Whether they dwell amidst a fallen human colony, archeotech ruins, or the remains of a xenos race such as the Egarian Dominion, the end result is that these supposed primitives have access to advanced tools, although they may understand little to nothing about these items. They may trade priceless relics for new kinds of “magic,” for example, or view the intrusion of other advanced races as a sign of an impending apocalypse.
+        9: "Xenophobic", #It is possible this race was previously exploited by less benign Explorers, or they may have simply evolved to treat anything but themselves as a deadly threat. They will aggressively attack anyone outside their race or tribe, and it will take extensive patience and peace offerings to even begin attempts at communication.
+        10: "Tradition-bound", #Unlike most primitive xenos, the lack of advancement for this culture is not based on youth, but an ancient and established tradition. The hallowed ancestors or ancient edicts of this race forbid diverging from their long-held path. Anything new—like the Explorers—is to be mistrusted.
+    }
+    return switch.get(PrimitiveXenosSocialRoll)
+
+#Generates a Primitive xenos civilization using the Kornonus Bestairy
+def PrimitiveXenosGeneration():
+    gamble = random.randint (1,4)
+    unusualGamble = random.randint(1,4)
+    if (gamble == 4 and unusualGamble == 4):
+        return print("Primitive Xenos Desc: ", PrimitiveXenosDesc(), "\nPrimitive Xenos Morphology: ", XenosMorphology(),"\nExotic Xenos Physiology: ", ExoticXenosPhysiology(),"\nUnusual Xenos Communication: ", UnusualXenosCom(),"\nPrimitive Xenos Social Structure: ", PrimitiveXenosSocialStructures())
+    elif (gamble == 4):
+        return print("Primitive Xenos Desc: ", PrimitiveXenosDesc(), "\nPrimitive Xenos Morphology: ", XenosMorphology(),"\nExotic Xenos Physiology: ", ExoticXenosPhysiology(),"\nPrimitive Xenos Social Structure: ", PrimitiveXenosSocialStructures())
+    elif (unusualGamble ==4):
+        return print("Primitive Xenos Desc: ", PrimitiveXenosDesc(), "\nPrimitive Xenos Morphology: ", XenosMorphology(),"\nUnusual Xenos Communication: ", UnusualXenosCom(), "\nPrimitive Xenos Social Structure: ", PrimitiveXenosSocialStructures())
+    else:
+        return print("Primitive Xenos Desc: ", PrimitiveXenosDesc(), "\nPrimitive Xenos Morphology: ", XenosMorphology(),"\nPrimitive Xenos Social Structure: ", PrimitiveXenosSocialStructures())
+
+#Picks which beast type it should be
+def BestialArchetypes():
+    ArchetypeRoll = random.randint(1,5)
+    switch = {
+        1: "Apex Predator",
+        2: "Behemoth",
+        3: "Ptera-Beast",
+        4: "Shadowed Stalker",
+        5: "Venomous Terror",
+    }
+    return switch.get(ArchetypeRoll)
+
+#Chooses the traits for Apex Predators
+def ApexPredator():
+    ApexRoll = random.randint(1,10)
+    switch = {
+        1: "Adapted",
+        2: "Adapted",
+        3: "Brute",
+        4: "Brute",
+        5:"Cunning Stalker",
+        6: "Cunning Stalker",
+        7: "Killing Machine",
+        8: "Living Arsenal",
+        9: "Natural Prowess",
+        10: "Natural Prowess",
+    }
+    return switch.get(ApexRoll)
+
+#Chooses the traits for Behemoths
+def Behemoths():
+    BehemothRoll = random.randint(1,10)
+    switch = {
+        1: "Beyond Challenge",
+        2: "Beyond Challenge",
+        3: "Impossible Grace",
+        4: "Leviathan",
+        5: "Leviathan",
+        6: "Megapredator",
+        7: "Megapredator",
+        8: "Titanborn",
+        9: "Unstoppable",
+        10: "Unstoppable",
+    }
+    return switch.get(BehemothRoll)
+
+#Chooses the traits for PteraBeasts
+def PteraBeasts():
+    PteraRoll = random.randint(1,10)
+    switch = {
+        1: "Aerial Impossibility",
+        2: "Aerial Impossibility",
+        3: "Doom Diver",
+        4: "Earth-Scorning",
+        5: "Earth-Scorning",
+        6: "Skyless Flight",
+        7: "Swift Flyer",
+        8: "Swift Flyer",
+        9: "Swift Flyer",
+        10: "Wyrdwing",
+    }
+    return switch.get(PteraRoll)
+
+#Chooses the traits for Shadowed Stalkers
+def ShadowedStalkers():
+    StalkerRoll = random.randint(1,10)
+    switch = {
+        1: "Adapted",
+        2: "Adapted",
+        3: "Chameleonic",
+        4: "Chameleonic",
+        5: "Deadly Ambusher",
+        6: "Deadly Ambusher",
+        7: "Lure",
+        8: "Shadow-walking",
+        9: "Vanisher", 
+        10: "Vanisher", 
+    }
+    return switch.get(StalkerRoll)
+
+#Chooses the traits for Venomous Terrors
+def VenomousTerrors():
+    TerrorsRoll = random.randint(1,10)
+    switch = {
+        1: "Deadly Touch",
+        2: "Delirium Bringer",
+        3: "Toxic Hunter",
+        4: "Toxic Hunter",
+        5: "Hidden Death",
+        6: "Hidden Death",
+        7: "Poisonous Presence",
+        8: "Poisonous Presence",
+        9: "Potent Toxins",
+        10: "Potent Toxins",
+    }
+    return switch.get(TerrorsRoll)
+
+#Creates a Beast using stars of enequity
+def BeastGeneration():
+    Nature = BestialArchetypes()
+    Traits = []
+    TraitRoll = random.randint(1,3) #This may not make since it says at least one roll
+    while TraitRoll >= 1:
+        
+        if (Nature == "Apex Predator"):
+            Traits.append(ApexPredator())
+        elif (Nature == "Behemoth"):
+            Traits.append(Behemoths())
+        elif (Nature == "Ptera-Beast"):
+            Traits.append(PteraBeasts())
+        elif (Nature == "Venomous Terror"):
+            Traits.append(VenomousTerrors())
+        else: #Shadowed Stalkers
+            Traits.append(ShadowedStalkers())
+        TraitRoll -= 1
+    return print("Bestial Archetype: ", Nature, "\nBestial Traits: ", ", ".join(Traits))
+    
+#Decides which inhabitant civ to create
+#possible understanding in place    
+#change latter do not understand uninhabitable for orks and kroots
+def inhabitants(habit):
+    if habit != "Verdant": #Verdant = Habitable planet
+        inhabitantRoll = random.randint(1,10)
+        while (inhabitantRoll >= 5 and inhabitantRoll <= 7):
+            inhabitantRoll = random.randint(1,10)
+    else:
+        inhabitantRoll = random.randint(1,10)
+    
+    switch = {
+        1: "Eldar",
+        2: "Humans",
+        3: "Humans",
+        4: "Humans",
+        5: "Kroot",
+        6: "Orks",
+        7: "Orks",
+        8: "Rak’Gol",
+        9: "Xenos (Other)",
+        10: "Xenos (Other)",
+    }
+    return switch.get(inhabitantRoll)
+
+#generates knife eared civ
+def Eldar(habit):
+    if habit != "Verdant": #Verdant = Habitable plane
+        EldarRoll = random.randint(4,10)
+    else: 
+        EldarRoll = random.randint(1,10)
+    switch = {
+        1: "Primitive Clans (Exodites)††",
+        2: "Primitive Clans (Exodites)††",
+        3: "Primitive Clans (Exodites)††",
+        4: "Orbital Habitation",
+        5: "Orbital Habitation",
+        6: "Orbital Habitation",
+        7: "Orbital Habitation",
+        8: "Orbital Habitation",
+        9: "Voidfarers",
+        10: "Voidfarers",
+    }
+    return switch.get(EldarRoll)
+
+#generates hummies civ
+def Humans(habit):
+    if habit != "Verdant":
+        HumanRoll = random.randint(1,10)
+        while(HumanRoll >= 4 and HumanRoll <= 9):
+            HumanRoll = random.randint(1,10)
+    else:
+        HumanRoll = random.randint(1,10)
+    switch = {
+        1: "Advanced Industry",
+        2: "Advanced Industry",
+        3: "Colony",
+        4: "Orbital Habitation",
+        5: "Basic Industry††",
+        6: "Basic Industry††",
+        7: "Pre-Industrial††",
+        8: "Pre-Industrial††",
+        9: "Primitive Clans††",
+        10: "Voidfarers",
+    }
+    return switch.get(HumanRoll)
+
+#generates Kroot civ
+def Kroot():
+    KrootRoll = random.randint(1,10)
+    switch = {
+        1: "Primitive Clans",
+        2: "Primitive Clans",
+        3: "Primitive Clans",
+        4: "Primitive Clans",
+        5: "Primitive Clans",
+        6: "Primitive Clans",
+        7: "Primitive Clans",
+        8: "Colony",
+        9: "Colony",
+        10: "Colony",
+    }
+    return switch.get(KrootRoll)
+
+#generates ork civ
+def Orks():
+    OrkRoll = random.randint(1,10)
+    switch = {
+        1: "Advanced Industry",
+        2: "Advanced Industry",
+        3: "Advanced Industry",
+        4: "Advanced Industry",
+        5: "Colony",
+        6: "Primitive Clans",
+        7: "Primitive Clans",
+        8: "Primitive Clans",
+        9: "Voidfarers",
+        10: "Voidfarers",
+    }
+    return switch.get(OrkRoll)
+
+#Generates RokGol civ            
+def RakGol():
+    RakGolRoll = random.randint(1,10)
+    switch = {
+        1: "Colony",
+        2: "Colony",
+        3: "Orbital",
+        4: "Orbital",
+        5: "Voidfarers",
+        6: "Voidfarers",
+        7: "Voidfarers",
+        8: "Voidfarers",
+        9: "Voidfarers",
+        10: "Voidfarers",
+    }    
+    return switch.get(RakGolRoll)
+
+#Generates other xenos civ
+def XenosCiv(habit):
+    if habit != "Verdant":
+        XenosCivRoll = random.randint(1,10)
+        while(XenosCivRoll >= 4 and XenosCivRoll <= 9):
+            XenosCivRoll = random.randint(1,10)
+    else:
+        XenosCivRoll = random.randint(1,10)
+    switch = {
+        1: "Advanced Industry",
+        2: "Advanced Industry",
+        3: "Colony",
+        4: "Orbital Habitation",
+        5: "Basic Industry††",
+        6: "Basic Industry††",
+        7: "Pre-Industrial††",
+        8: "Pre-Industrial††",
+        9: "Primitive Clans††",
+        10: "Voidfarers",
+    }
+    return switch.get(XenosCivRoll)
+
+#Generates an inhabitant civilization uses rouge trader book
+def generateInhabitantCiv(habit):
+    Inhabitant = inhabitants(habit)
+    if (Inhabitant == "Eldar"):
+        Civilization = Eldar(habit)
+    elif (Inhabitant == "Humans"):
+        Civilization = Humans(habit)
+    elif (Inhabitant == "Kroot"):
+        Civilization = Kroot()
+    elif (Inhabitant == "Orks"):
+        Civilization = Orks()
+    elif (Inhabitant == "Rak’Gol"):
+        Civilization = RakGol()
+    else:
+        Civilization = XenosCiv(habit)
+    return print("Inhabitants: ", Inhabitant,"\nCivilization: ", Civilization)
+
+#Generates a Flora life form
+def floraGeneration(World):
+    profile = floralProfile()
+    Type = floraType()
+    print("Profile: "+ profile +"\nType: " + Type)
+    floraSpeciesTraits(Type, World)
+
+#Generates a fauna life form
+def faunaGeneration(World):
+    Base = faunaBase()
+    Size = faunaSize(Base)
+    print("Fauna Base: "+ Base +"\nFauna Size: " + Size)
+    faunaBeastTraits(Base, World)
+    
+#Creates an entire ecosstem with up to 20 unique life forms
+def Ecosystem(habit, World):
+    if habit == "Limited Ecosystem":
+        lifeforms = random.randint(1,6)
+        advancedCiv = random.randint(1,10)
+        if advancedCiv == 10:
+            PrimitiveOrInhabitant = random.randint(1,10)
+            if PrimitiveOrInhabitant <= 1:
+                PrimitiveXenosGeneration()
+            else:
+                generateInhabitantCiv(habit)
+    elif habit == "Verdant":
+        lifeforms = random.randint(6,20)
+        advancedCiv = random.randint(1,10)
+        if advancedCiv >= 8:
+            PrimitiveOrInhabitant = random.randint(1,10)
+            if PrimitiveOrInhabitant <= 5:
+                PrimitiveXenosGeneration()
+            else:
+                generateInhabitantCiv(habit)
+    else:
+        return "NO ECOSYSTEM"
+    i = 1
+   
+    while i <= lifeforms: 
+        #May change latter testing to see if generation looks like first
+        #Should change to look better
+        lifetype = random.randint(1,10)    
+        switch = {
+            1: lambda: floraGeneration(World),
+            2: lambda: floraGeneration(World),
+            3: lambda:  floraGeneration(World),
+            4: lambda:  floraGeneration(World),
+            5: lambda:  faunaGeneration(World),
+            6: lambda:  faunaGeneration(World),
+            7: lambda:  faunaGeneration(World),
+            8: lambda:  faunaGeneration(World),
+            9: lambda:  BeastGeneration(),
+            10: lambda:  BeastGeneration(), 
+        }
+        # Call the function associated with the generated lifetype
+        #next two lines are generated by Chat don't know how but they work
+        print(f"\nLifeform {i} ")
+        switch.get(lifetype, lambda: "Unknown type")()  # Default to "Unknown type" if no match
+        i += 1  # Increment the counter
+    
+    
+
 def main():
     #print(floralProfile(), floraType(), floraSpeciesTraits(floraType(), "Ocean World"))
     
     #This looks a lot nicer than the previous showing code above
-    profile = floralProfile()
-    Type = floraType()
-    print("Profile: "+ profile +"\nType: " + Type)
-    floraSpeciesTraits(Type, "Ocean World")
-    print("\n\n\n\n")
-    Base = faunaBase()
-    Size = faunaSize(Base)
-    print("Fauna Base: "+ Base +"\nFauna Size: " + Size)
-    faunaBeastTraits(Base, "")
+    #profile = floralProfile()
+    #Type = floraType()
+    #print("Profile: "+ profile +"\nType: " + Type)
+    #floraSpeciesTraits(Type, "Ocean World")
+    #print("\n\n\n\n")
+    #Base = faunaBase()
+    #Size = faunaSize(Base)
+    #print("Fauna Base: "+ Base +"\nFauna Size: " + Size)
+    #faunaBeastTraits(Base, "")
+    #print("\n\n\n\n")
+    #PrimitiveXenosGeneration()
+    #print("\n\n\n\n")
+    #BeastGeneration()
+    #print("\n\n\n\n")
+    #generateInhabitantCiv("Verdant") #Verdant = everthing if not it has restrictions
+
+    Ecosystem("Verdant", "Death World")
+
+
 
 if __name__ == "__main__":
     main()
