@@ -1,6 +1,5 @@
 from PyQt5.QtWidgets import QWidget, QVBoxLayout, QHBoxLayout, QPushButton, QLabel, QListWidget, QSplitter, QListWidgetItem, QApplication
 from PyQt5.QtCore import Qt
-from generationOutput import generation
 
 class StarGeneratorUI(QWidget):
     def __init__(self, generate_callback):
