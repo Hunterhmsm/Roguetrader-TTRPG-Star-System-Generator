@@ -360,8 +360,8 @@ def systemElements(star):
     #NOW IMPROVED VERSION
     #LOOKS SLIGHTLY BETTER 
     #Seperates System Elements
-    return print("Inner Cauldron's Elements: ",InnerCauldronElements,"\nPrimary Bioshpere's Elements: ",PrimaryBiosphereElements,"\nOuter Feature's Elements: ",OuterFeaturesElements)
-
+    #return print("Inner Cauldron's Elements: ", ", ".join(InnerCauldronElements),"\nPrimary Bioshpere's Elements: ", ", ".join(PrimaryBiosphereElements),"\nOuter Feature's Elements: ",", ".join(OuterFeaturesElements))
+    return InnerCauldronElements, PrimaryBiosphereElements, OuterFeaturesElements
 
 
 
@@ -692,7 +692,9 @@ def rockPlanetCreation(Location):
     #rare chance that Habitability wont get filled out (It was because it was one line over in an else statement that only gets filled out when no atmoshere)
     #old version below
     #return print("Body: "+ body + "\nBody Description: "+ bodyDesc + "\n\nGravity: "+ gravity + "\nGravity Description: " + gravityDesc + "\n\nOrbital Feature: "+"\nOrbital Feature: ".join(orbitalFeature) + "\nOrbital Feature Description" + "\n\n".join(orbitalFeatDESC) + "\n\nAtmoshere: " + Atmosphere + "\nAtmoshere Description: " + atmosphereDesc + "\n\nAtmosheric Composition: "+ atmosphericComp+ "\nAtmosheric Compositon Description: "+ atmoshericCompDesc + "\n\nCLimate: " + climate + "\nClimate Discription: " + climateDesc + "\n\nHabitablility: " + habitability + "\nHabitablility Discription: " + habDesc + "\n\nLandmasses: " + str(Landmasses) + "\nLandmass Discription: " + LandDesc)
-    return print("Body: "+ body + "\nBody Description: "+ bodyDesc + "\n\nGravity: "+ gravity + "\nGravity Description: " + gravityDesc + "\n\nOrbital Feature: ".join(combinedOrbitFeatures) + "\n\nAtmoshere: " + Atmosphere + "\nAtmoshere Description: " + atmosphereDesc + "\n\nAtmosheric Composition: "+ atmosphericComp+ "\nAtmosheric Compositon Description: "+ atmoshericCompDesc + "\n\nCLimate: " + climate + "\nClimate Discription: " + climateDesc + "\n\nHabitablility: " + habitability + "\nHabitablility Discription: " + habDesc + "\n\nLandmasses: " + str(Landmasses) + "\nLandmass Discription: " + LandDesc)
+    #return print("Body: "+ body + "\nBody Description: "+ bodyDesc + "\n\nGravity: "+ gravity + "\nGravity Description: " + gravityDesc + "\n\nOrbital Feature: ".join(combinedOrbitFeatures) + "\n\nAtmoshere: " + Atmosphere + "\nAtmoshere Description: " + atmosphereDesc + "\n\nAtmosheric Composition: "+ atmosphericComp+ "\nAtmosheric Compositon Description: "+ atmoshericCompDesc + "\n\nCLimate: " + climate + "\nClimate Discription: " + climateDesc + "\n\nHabitablility: " + habitability + "\nHabitablility Discription: " + habDesc + "\n\nLandmasses: " + str(Landmasses) + "\nLandmass Discription: " + LandDesc)
+    #Above is old versions below is just variables that can be used in UI
+    return body, gravity, combinedOrbitFeatures, Atmosphere, atmosphericComp, climate, habitability, str(Landmasses), LandDesc
     
 #Used to generate MOONS
 #Same as Rock moons but without orbital features
@@ -906,7 +908,9 @@ def moonCreation(pbody,Location):
     #CHANGE orbital features to make more sense if it looks like shit (it will)
     #Find a way to get it so that orbital features and orbital feature description are together
     #rare chance that Habitability wont get filled out (It was because it was one line over in an else statement that only gets filled out when no atmoshere)
-    return print("MOON GENERATED LETS GOOOOOO\nBody: "+ body + "\nBody Description: "+ bodyDesc + "\n\nGravity: "+ gravity + "\nGravity Description: " + gravityDesc + "\n\nAtmoshere: " + Atmosphere + "\nAtmoshere Description: " + atmosphereDesc + "\n\nAtmosheric Composition: "+ atmosphericComp+ "\nAtmosheric Compositon Description: "+ atmoshericCompDesc + "\n\nCLimate: " + climate + "\nClimate Discription: " + climateDesc + "\n\nHabitablility: " + habitability + "\nHabitablility Discription: " + habDesc + "\n\nLandmasses: " + str(Landmasses) + "\nLandmass Discription: " + LandDesc + "\nEND OF MOON GENERATION\n\n\n")
+    #return print("MOON GENERATED LETS GOOOOOO\nBody: "+ body + "\nBody Description: "+ bodyDesc + "\n\nGravity: "+ gravity + "\nGravity Description: " + gravityDesc + "\n\nAtmoshere: " + Atmosphere + "\nAtmoshere Description: " + atmosphereDesc + "\n\nAtmosheric Composition: "+ atmosphericComp+ "\nAtmosheric Compositon Description: "+ atmoshericCompDesc + "\n\nCLimate: " + climate + "\nClimate Discription: " + climateDesc + "\n\nHabitablility: " + habitability + "\nHabitablility Discription: " + habDesc + "\n\nLandmasses: " + str(Landmasses) + "\nLandmass Discription: " + LandDesc + "\nEND OF MOON GENERATION\n\n\n")
+    #Above is old blow is just variables
+    return body, gravity, Atmosphere, atmosphericComp, habitability, str(Landmasses), LandDesc
     
 #Uses a Gas Planet, generates its body, gravity, orbital Features
 # #Used to generate Gas Planets
@@ -1007,8 +1011,9 @@ def gasPlanetCreation(Location):
     #combines orbit and features ?
     combinedOrbitFeatures = [item for pair in zip(orbitalFeature, orbitalFeatDESC) for item in pair]
     combinedOrbitFeatures += orbitalFeature[len(orbitalFeatDESC):] + orbitalFeatDESC[len(orbitalFeature):]
-    return print("\nBody: "+ body+ "\nBody Description: "+ bodyDesc + "\n\nGravity: "+ gravity + "\n\nGravity Description: "+ gravDesc + "\n\nOrbital Feature: ".join(combinedOrbitFeatures))
-
+    #return print("\nBody: "+ body+ "\nBody Description: "+ bodyDesc + "\n\nGravity: "+ gravity + "\n\nGravity Description: "+ gravDesc + "\n\nOrbital Feature: ".join(combinedOrbitFeatures))
+    #Above is what was used below is just the variables. that will be used in the generation UI
+    return body, gravity, combinedOrbitFeatures
 
 
 #used to generate mineral Resources
@@ -1117,13 +1122,13 @@ def main():
     #print(innerCauldronElements(starType()))
     #print(primaryBioshereElements(starType()))
     #print(outerReachesElements(starType()))
-    #print(systemElements(starType()))
+    print(systemElements(starType()))
     #print(derelictStationOrigins())
     #print(starshipGraveyardOrigins())
     #Location = "Inner Cauldron"
     #Location = "Outer Reaches"
     Location = "CENTER" 
-    print(rockPlanetCreation(Location))
+    #print(rockPlanetCreation(Location))
     #print(moonCreation("Small",Location))
     #print(mineralResource())
     #print(resourceAbundance(15))
