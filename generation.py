@@ -19,7 +19,6 @@ def amountOfSystemFeatures():
 
 #generates the system feature
 def systemFeatures():
-    
     systemFeature = random.randint(1, 10) # random int 1-10 assigned to systemFeature
 
     features = {      # dictonary of features based on roll
@@ -37,6 +36,20 @@ def systemFeatures():
     #return feature based on roll
     return features[systemFeature]
 
+def allSFeatures():
+    featureList = []
+    selectedFeatures = set()
+    roll = 0
+    while roll <= 0:
+        roll = random.randint(1,5)-2
+    while roll > 0:
+        feature = systemFeatures()
+        while feature in selectedFeatures:  # Re-roll until a unique feature is generated
+            feature = systemFeatures()
+        featureList.append(feature)
+        selectedFeatures.add(feature)
+        roll -= 1
+    return featureList
 
 
     #UGLY WAY OF DOING IT GO AWAY
@@ -360,8 +373,8 @@ def systemElements(star):
     #NOW IMPROVED VERSION
     #LOOKS SLIGHTLY BETTER 
     #Seperates System Elements
-    return print("Inner Cauldron's Elements: ",InnerCauldronElements,"\nPrimary Bioshpere's Elements: ",PrimaryBiosphereElements,"\nOuter Feature's Elements: ",OuterFeaturesElements)
-
+    #return print("Inner Cauldron's Elements: ", ", ".join(InnerCauldronElements),"\nPrimary Bioshpere's Elements: ", ", ".join(PrimaryBiosphereElements),"\nOuter Feature's Elements: ",", ".join(OuterFeaturesElements))
+    return InnerCauldronElements, PrimaryBiosphereElements, OuterFeaturesElements
 
 
 
@@ -454,6 +467,7 @@ def starshipGraveyardOrigins():
 #Find Way to get generation to look cleaner with the moons situation perferably put it into a file or something 
 #Find way to get Orbital Feature not to dupe don't understand why it dupes
 def rockPlanetCreation(Location):
+    moons = 0
     bodyRoll = random.randint(1,10)
     #rolls a d10 for the body 
     #gets the body type of a rock planet
@@ -548,6 +562,7 @@ def rockPlanetCreation(Location):
             orbitalFeatDESC.append("\nOrbital Feature Description: A true moon is generated as a Planet, using the rules for Planet Creation (see page 19). \nUnder normal circumstances, a moon cannot have a higher Planetary Body than the world around which it orbits. \nIn addition, a moon never generates its own Orbital Features.")
             #create another method for MOON creation using the same as planets but without the moon to get a bigger size than the planets
             moonCreation(body, Location)
+            moons += 1
         orbitalFeatureRoll -= 1 
     #Used to generate the atmoshere of the planet
     if atmosphericPresnceRoll <= 1:
@@ -692,7 +707,9 @@ def rockPlanetCreation(Location):
     #rare chance that Habitability wont get filled out (It was because it was one line over in an else statement that only gets filled out when no atmoshere)
     #old version below
     #return print("Body: "+ body + "\nBody Description: "+ bodyDesc + "\n\nGravity: "+ gravity + "\nGravity Description: " + gravityDesc + "\n\nOrbital Feature: "+"\nOrbital Feature: ".join(orbitalFeature) + "\nOrbital Feature Description" + "\n\n".join(orbitalFeatDESC) + "\n\nAtmoshere: " + Atmosphere + "\nAtmoshere Description: " + atmosphereDesc + "\n\nAtmosheric Composition: "+ atmosphericComp+ "\nAtmosheric Compositon Description: "+ atmoshericCompDesc + "\n\nCLimate: " + climate + "\nClimate Discription: " + climateDesc + "\n\nHabitablility: " + habitability + "\nHabitablility Discription: " + habDesc + "\n\nLandmasses: " + str(Landmasses) + "\nLandmass Discription: " + LandDesc)
-    return print("Body: "+ body + "\nBody Description: "+ bodyDesc + "\n\nGravity: "+ gravity + "\nGravity Description: " + gravityDesc + "\n\nOrbital Feature: ".join(combinedOrbitFeatures) + "\n\nAtmoshere: " + Atmosphere + "\nAtmoshere Description: " + atmosphereDesc + "\n\nAtmosheric Composition: "+ atmosphericComp+ "\nAtmosheric Compositon Description: "+ atmoshericCompDesc + "\n\nCLimate: " + climate + "\nClimate Discription: " + climateDesc + "\n\nHabitablility: " + habitability + "\nHabitablility Discription: " + habDesc + "\n\nLandmasses: " + str(Landmasses) + "\nLandmass Discription: " + LandDesc)
+    #return print("Body: "+ body + "\nBody Description: "+ bodyDesc + "\n\nGravity: "+ gravity + "\nGravity Description: " + gravityDesc + "\n\nOrbital Feature: ".join(combinedOrbitFeatures) + "\n\nAtmoshere: " + Atmosphere + "\nAtmoshere Description: " + atmosphereDesc + "\n\nAtmosheric Composition: "+ atmosphericComp+ "\nAtmosheric Compositon Description: "+ atmoshericCompDesc + "\n\nCLimate: " + climate + "\nClimate Discription: " + climateDesc + "\n\nHabitablility: " + habitability + "\nHabitablility Discription: " + habDesc + "\n\nLandmasses: " + str(Landmasses) + "\nLandmass Discription: " + LandDesc)
+    #Above is old versions below is just variables that can be used in UI
+    return body, gravity, combinedOrbitFeatures, Atmosphere, atmosphericComp, climate, habitability, str(Landmasses), LandDesc, moons
     
 #Used to generate MOONS
 #Same as Rock moons but without orbital features
@@ -906,13 +923,16 @@ def moonCreation(pbody,Location):
     #CHANGE orbital features to make more sense if it looks like shit (it will)
     #Find a way to get it so that orbital features and orbital feature description are together
     #rare chance that Habitability wont get filled out (It was because it was one line over in an else statement that only gets filled out when no atmoshere)
-    return print("MOON GENERATED LETS GOOOOOO\nBody: "+ body + "\nBody Description: "+ bodyDesc + "\n\nGravity: "+ gravity + "\nGravity Description: " + gravityDesc + "\n\nAtmoshere: " + Atmosphere + "\nAtmoshere Description: " + atmosphereDesc + "\n\nAtmosheric Composition: "+ atmosphericComp+ "\nAtmosheric Compositon Description: "+ atmoshericCompDesc + "\n\nCLimate: " + climate + "\nClimate Discription: " + climateDesc + "\n\nHabitablility: " + habitability + "\nHabitablility Discription: " + habDesc + "\n\nLandmasses: " + str(Landmasses) + "\nLandmass Discription: " + LandDesc + "\nEND OF MOON GENERATION\n\n\n")
+    #return print("MOON GENERATED LETS GOOOOOO\nBody: "+ body + "\nBody Description: "+ bodyDesc + "\n\nGravity: "+ gravity + "\nGravity Description: " + gravityDesc + "\n\nAtmoshere: " + Atmosphere + "\nAtmoshere Description: " + atmosphereDesc + "\n\nAtmosheric Composition: "+ atmosphericComp+ "\nAtmosheric Compositon Description: "+ atmoshericCompDesc + "\n\nCLimate: " + climate + "\nClimate Discription: " + climateDesc + "\n\nHabitablility: " + habitability + "\nHabitablility Discription: " + habDesc + "\n\nLandmasses: " + str(Landmasses) + "\nLandmass Discription: " + LandDesc + "\nEND OF MOON GENERATION\n\n\n")
+    #Above is old blow is just variables
+    return body, gravity, Atmosphere, atmosphericComp, climate, habitability, str(Landmasses), LandDesc
     
 #Uses a Gas Planet, generates its body, gravity, orbital Features
 # #Used to generate Gas Planets
 #Find Way to get generation to look cleaner with the moons situation perferably put it into a file or something
 #Find way to get Orbital Feature not to dupe don't understand why it dupes
 def gasPlanetCreation(Location):
+    moons = 0
     bodyRoll = random.randint(1,10)
     #roll d10 to gen a body
     #generates the body
@@ -1003,12 +1023,14 @@ def gasPlanetCreation(Location):
             orbitalFeature.append("A true moon is generated as a Planet, using the rules for Planet Creation (see page 19). \nUnder normal circumstances, a moon cannot have a higher Planetary Body than the world around which it orbits. \nIn addition, a moon never generates its own Orbital Features.")
             #little confused to how this works with gas just letting all values go through
             moonCreation(body,mLocation)
+            moons +=1
         orbitRoll -= 1
     #combines orbit and features ?
     combinedOrbitFeatures = [item for pair in zip(orbitalFeature, orbitalFeatDESC) for item in pair]
     combinedOrbitFeatures += orbitalFeature[len(orbitalFeatDESC):] + orbitalFeatDESC[len(orbitalFeature):]
-    return print("\nBody: "+ body+ "\nBody Description: "+ bodyDesc + "\n\nGravity: "+ gravity + "\n\nGravity Description: "+ gravDesc + "\n\nOrbital Feature: ".join(combinedOrbitFeatures))
-
+    #return print("\nBody: "+ body+ "\nBody Description: "+ bodyDesc + "\n\nGravity: "+ gravity + "\n\nGravity Description: "+ gravDesc + "\n\nOrbital Feature: ".join(combinedOrbitFeatures))
+    #Above is what was used below is just the variables. that will be used in the generation UI
+    return body, gravity, combinedOrbitFeatures, moons
 
 
 #used to generate mineral Resources
@@ -1050,7 +1072,66 @@ def resourceAbundance(roll):
         abunDesc = "The reserves of this Resource are seem limitless. \nThough deposits of this value have been exhausted by the Imperium before, \nit would take at least a decade to deplete this resource, barring the most aggressive efforts."
     return "Abundance Rating: " + abundance + "\nAbundance Description: " + abunDesc
 
+#used to generate Organic Resources
+def organicResources():
+    organicRoll = random.randint(1,10)
+    switch = {
+        1: "Curative",
+        2: "Curative",
+        3: "Juvenat Compound",
+        4: "Juvenat Compound",
+        5: "Toxin", 
+        6: "Toxin",
+        7: "Vivid Accessory",
+        8: "Vivid Accessory",
+        9: "Vivid Accessory",
+        10: "Exotic Compound",
+    }
+    return switch.get(organicRoll)
 
+#used to generate the Xenos Ruins
+def xenosRuins():
+    xenosRuinedRoll = random.randint(1,10)
+    switch = {
+        1: "The Ruins belonged to an undiscovered species",
+        2: "The Ruins belonged to an undiscovered species",
+        3: "The Ruins belonged to an undiscovered species",
+        4: "The Ruins belonged to an undiscovered species",
+        5: "Eldar Ruins",
+        6: "Eldar Ruins",
+        7: "Egarian Ruins",
+        8: "Yu'Vath Ruins",
+        9: "Ork Ruins",
+        10: "Kroot Ruins",
+    }
+    return switch.get(xenosRuinedRoll)
+
+#used to generate Landmarks
+def genLandmark():
+    LandmarkRoll = random.randint(1,100)
+    if (LandmarkRoll <=20):
+        return "Canyon"
+    elif (LandmarkRoll <= 35):
+        return "CaveNetwork"
+    elif (LandmarkRoll <= 45):
+        return "Crater"
+    elif (LandmarkRoll <= 65):
+        return "Mountain"
+    elif (LandmarkRoll <= 75):
+        return "Valcano"
+    elif (LandmarkRoll <= 100):
+        # Because you can choose the landmark for this one 
+        # Gamble with the options with the choice to choose the outcome at the end.
+        gamble = random.randint(1,5)
+        switch ={
+            1: "Glacier",
+            2: "Inland Sea",
+            3: "Perpetual Storm",
+            4: "Reef",
+            5: "Whirlpool",
+        }
+        return switch.get(gamble) + "Or Choose for yourself Between \nGlacier \nInlandSea \nPerpetual Storm \nReef \nWhirlpool"
+    
 
 def main():
     #print(starType())
@@ -1069,6 +1150,7 @@ def main():
     #print(mineralResource())
     #print(resourceAbundance(15))
     #print(gasPlanetCreation(Location))
+    #print(allSFeatures())
 
 
 
