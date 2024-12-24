@@ -1,4 +1,4 @@
-from PyQt5.QtWidgets import QWidget, QVBoxLayout, QHBoxLayout, QPushButton, QLabel, QListWidget, QSplitter, QListWidgetItem, QApplication
+from PyQt5.QtWidgets import QWidget, QVBoxLayout, QHBoxLayout, QPushButton, QLabel, QListWidget, QSplitter, QListWidgetItem, QApplication, QScrollArea
 from PyQt5.QtCore import Qt
 from generation import rockPlanetCreation, gasPlanetCreation, moonCreation
 
@@ -6,28 +6,27 @@ class StarGeneratorUI(QWidget):
     def __init__(self, generate_callback):
         super().__init__()
         
-        #set up the window
+        # Set up the window
         self.setWindowTitle("Star Type Generator")
         layout = QVBoxLayout()
 
-        #background color
+        # Background color
         self.setStyleSheet("""
             QWidget {
                 background-color: #2b2b2b;
             }
         """)
 
-        #set up the layout and widgets
-        layout = QVBoxLayout()
+        # Setting up the sidebar with a scroll area
+        self.sidebar_scroll = QScrollArea()
+        self.sidebar_scroll.setWidgetResizable(True)
+        self.sidebar_scroll.setStyleSheet("background-color: #2E3440; color: white;")
 
+        # Sidebar content container
+        self.sidebar_content = QWidget()
+        self.sidebar_layout = QVBoxLayout(self.sidebar_content)
 
-        #setting up the sidebar
-        sidebar = QWidget()
-        sidebar.setFixedWidth(200)
-        self.sidebar_layout = QVBoxLayout(sidebar)
-        
-        #default text
-        #and sidebar labels
+        # Add default text and labels
         self.sidebar_label_systemfeatures = QLabel("")
         self.sidebar_label_star = QLabel("")
         self.sidebar_label_systemfeatures.setAlignment(Qt.AlignCenter)
@@ -35,11 +34,19 @@ class StarGeneratorUI(QWidget):
         self.sidebar_layout.addWidget(self.sidebar_label_systemfeatures)
         self.sidebar_layout.addWidget(self.sidebar_label_star)
 
+        # Add stretch to fill extra space
         self.sidebar_layout.addStretch()
-        sidebar.setStyleSheet("background-color: #2E3440; color: white;")
-        layout.addWidget(sidebar)
 
-        #custom style labels
+        # Set the sidebar content widget to the scroll area
+        self.sidebar_scroll.setWidget(self.sidebar_content)
+        # Match previous design width
+        # This may need to change
+        self.sidebar_scroll.setFixedWidth(200)  
+        
+        # Add the scroll area to the main layout
+        layout.addWidget(self.sidebar_scroll)
+
+        # Custom style labels
         self.label = QLabel("Click 'Generate' to get a star type", self)
         self.label.setAlignment(Qt.AlignCenter)
         self.label.setStyleSheet("""
@@ -51,7 +58,7 @@ class StarGeneratorUI(QWidget):
         """)
 
         self.button = QPushButton("Generate", self)
-        self.button.clicked.connect(generate_callback)  #connect button to callback IMPORTANT
+        self.button.clicked.connect(generate_callback)  # Connect button to callback
         self.button.setStyleSheet("""
             QPushButton {
                 background-color: #4caf50;
@@ -69,7 +76,7 @@ class StarGeneratorUI(QWidget):
             }
         """)
 
-        #add widgets to the layout
+        # Add widgets to the layout
         layout.addWidget(self.label)
         layout.addWidget(self.button)
         self.setLayout(layout)
@@ -129,7 +136,9 @@ class StarGeneratorUI(QWidget):
 
         for index, feature in enumerate(features):
             label = QLabel(feature)
-            label.setAlignment(Qt.AlignCenter)
+            #THIS IS CHANGED TO BE VISABLE
+            #AlignCenter -> AlignLeft
+            label.setAlignment(Qt.AlignLeft)
             label.setStyleSheet("color: white; font-size: 12px;")
             label.setObjectName(f"feature_label_{index}")
             self.sidebar_layout.addWidget(label)
@@ -162,7 +171,7 @@ class StarGeneratorUI(QWidget):
             "Primary Biosphere": PrimaryBiosphereElements,
             "Outer Features": OuterFeaturesElements,
         }
-
+        #Loops and displays each element based on the zone that they are attached to.
         for zone, elements in elements_dict.items():
             label_zone = QLabel(f"{zone}:")
             label_zone.setAlignment(Qt.AlignLeft)
@@ -183,17 +192,38 @@ class StarGeneratorUI(QWidget):
     
     
     # Triggers planet generation whenever a planet shows up
-    # Should add trigger for gas giants as well as moons in the future
-    # DONT KNOW IF WE WILL NEED A Trigger moon generator as well
+    # Moon triggers are built into update planet and update GasGiant
+    # may need to make this look better or add compressable segments 
     def triggerPlanetGen(self, systemElements):
         """Triggers updatePlanetGen when 'Planet' is found in any of the elements."""
+        #takes system elements and makes them into variables
         InnerCauldronElements, PrimaryBiosphereElements, OuterFeaturesElements = systemElements
-    
+        
+        
+        #puts variables into a readable list
         elements_dict = {
             "Inner Cauldron": InnerCauldronElements,
             "Primary Biosphere": PrimaryBiosphereElements,
             "Outer Features": OuterFeaturesElements,
         }
+        #REMOVES EVERTHING RELATED TO PLANET GENERATION
+        #Removes Body, Gravity, ... labels gets run evertime so it should be done here not in update planet gen
+        for index in reversed(range(self.sidebar_layout.count())):
+            widget = self.sidebar_layout.itemAt(index).widget()
+            if widget is not None and widget.objectName().startswith("part_label_"):
+                widget.deleteLater()
+        for index in reversed(range(self.sidebar_layout.count())):
+            widget = self.sidebar_layout.itemAt(index).widget()
+            if widget is not None and widget.objectName().startswith("info_label_"):
+                widget.deleteLater()
+        for index in reversed(range(self.sidebar_layout.count())):
+            widget = self.sidebar_layout.itemAt(index).widget()
+            if widget is not None and widget.objectName().startswith("gas_label_"):
+                widget.deleteLater()
+        for index in reversed(range(self.sidebar_layout.count())):
+            widget = self.sidebar_layout.itemAt(index).widget()
+            if widget is not None and widget.objectName().startswith("bits_label_"):
+                widget.deleteLater()
     
         # Loop through each zone and its elements
         for zone, elements in elements_dict.items():
@@ -205,32 +235,65 @@ class StarGeneratorUI(QWidget):
             for element in elements:
                 # Check if the element is "Planet"
                 if element == "Planet":
-                    # Call the updatePlanetGen when "Planet" is found
+                     # Inform the user which planet is being generated
+                    print(f"Generating a planet for the {zone} zone...")
+                
+                    # Optionally display this in the UI
+                    label_info = QLabel(f"Generating a planet for the {zone} zone...")
+                    label_info.setAlignment(Qt.AlignLeft)
+                    label_info.setStyleSheet("color: #FFD700; font-size: 12px;")
+                    label_info.setObjectName(f"info_label_{zone.replace(' ', '_')}")
+                    self.sidebar_layout.addWidget(label_info)
+
+                    # Call the updatePlanetGen to generate the planet
                     self.updatePlanetGen(zone)
+                if element == "Gas Gaint":
+                     # Inform the user which planet is being generated
+                    print(f"Generating a planet for the {zone} zone...")
+                
+                    # Optionally display this in the UI
+                    label_info = QLabel(f"Generating a Gas Giant for the {zone} zone...")
+                    label_info.setAlignment(Qt.AlignLeft)
+                    label_info.setStyleSheet("color: #FFD700; font-size: 12px;")
+                    label_info.setObjectName(f"info_label_{zone.replace(' ', '_')}")
+                    self.sidebar_layout.addWidget(label_info)
+
+                    # Call the updatePlanetGen to generate the planet
+                    self.updateGasGiant(zone)    
+                    
+                    
     
-    #Generates said planet suffering from same problem as updateSidebarSystemFeatures
-    #This is because the strings are being split apart into individual charactors
-    #Becuase of this and lack of scrollbar you are unable to make another generation
+    #Generates said planet
     #If system Elements generates a planet
     def updatePlanetGen(self, zone):
+        #Debugging line
         print(f"Planet found in the {zone}!")
-        body, gravity, combinedOrbitFeatures, Atmosphere, atmosphericComp, climate, habitability, Landmasses, LandDesc = rockPlanetCreation(zone)
+        #Grabs variables from planet generation
+        body, gravity, combinedOrbitFeatures, Atmosphere, atmosphericComp, climate, habitability, Landmasses, LandDesc, moons = rockPlanetCreation(zone)
         
+        #Commented section below not nessicary just in case something bricks first segment pervented
+        #Systemelements from showing up and secound segment is taken care of in trigger planet gen now
         # Clear existing sidebar planet elements
-        for index in reversed(range(self.sidebar_layout.count())):
-            widget = self.sidebar_layout.itemAt(index).widget()
-            if widget is not None and widget.objectName().startswith("element_label_"):
-                widget.deleteLater()
+        #for index in reversed(range(self.sidebar_layout.count())):
+            #widget = self.sidebar_layout.itemAt(index).widget()
+            #if widget is not None and widget.objectName().startswith("element_label_"):
+                #widget.deleteLater()
+                
+                
         # Clear existing sidebar of names of system elements
         # without this it will keep the names of these elements for some reason.    
-        for index in reversed(range(self.sidebar_layout.count())):
-            widget = self.sidebar_layout.itemAt(index).widget()
-            if widget is not None and widget.objectName().startswith("part_label_"):
-                widget.deleteLater()
+        
+        #for index in reversed(range(self.sidebar_layout.count())):
+            #widget = self.sidebar_layout.itemAt(index).widget()
+            #if widget is not None and widget.objectName().startswith("part_label_"):
+                #widget.deleteLater()
+        
         #List to count the parts of a planet for deletion later
         self.part_labels = []
         
-
+         
+            
+        #puts variables into a list
         planet_parts = {
             "Body": body,
             "Gravity": gravity,
@@ -243,8 +306,13 @@ class StarGeneratorUI(QWidget):
             "Landmass Description": LandDesc,
         }
         
-        
+        #This makes it so if it is a single item it doesn't get turned into a list
         for part, elements in planet_parts.items():
+            if not isinstance(elements, list):  # If it's not a list, make it one
+                elements = [str(elements)]
+            else:
+                elements = [str(element) for element in elements]
+            #Setting up yellow bolded text to show part
             label_part = QLabel(f"{part}:")
             label_part.setAlignment(Qt.AlignLeft)
             label_part.setStyleSheet("color: #FFD700; font-size: 14px; font-weight: bold;")
@@ -253,6 +321,121 @@ class StarGeneratorUI(QWidget):
             #Line Below appends them to make sure this gets deleted when 
             #a new generation takes placce
             self.part_labels.append(label_part)
+            #Prints the list of elements where they are suppost to be in corilation to the yellow bolds
+            for element in elements:
+                label_element = QLabel(f"  - {element}")
+                label_element.setAlignment(Qt.AlignLeft)
+                label_element.setStyleSheet("color: white; font-size: 12px;")
+                label_element.setObjectName(f"element_label_{element}")
+                self.sidebar_layout.addWidget(label_element)
+        #used to generate moons based on how many moons are attached to the planet
+        while moons >= 1:
+           
+            # Inform the user which planet is being generated
+            print(f"Generating a Moon for the Planet in the {zone} zone...")
+                
+            # Optionally display this in the UI
+            label_info = QLabel(f"Generating a Moon for the Planet in the {zone} zone...")
+            label_info.setAlignment(Qt.AlignLeft)
+            label_info.setStyleSheet("color: #FFD700; font-size: 12px;")
+            label_info.setObjectName(f"info_label_{zone.replace(' ', '_')}")
+            self.sidebar_layout.addWidget(label_info)
+            self.updateMOONS(body, zone) 
+            moons -=1
+        self.sidebar_layout.addStretch()
+    
+    #Generates a Gas Giant
+    def updateGasGiant(self, zone):
+        #Debug line
+        print(f"Gas Giant found in the {zone}!")
+        #Grabs variables from creating gas giant
+        body, gravity, combinedOrbitFeatures, moons = gasPlanetCreation(zone)
+        
+        #list so it can be deleted on new gen
+        self.gas_labels = []
+        
+        #makes variables into readable list
+        gasGiant_parts = {
+            "Body": body,
+            "Gravity": gravity,
+            "Orbital Features": combinedOrbitFeatures
+        }
+        
+        #This makes it so if it is a single item it doesn't get turned into a list
+        for gas, elements in gasGiant_parts.items():
+            if not isinstance(elements, list):  # If it's not a list, make it one
+                elements = [str(elements)]
+            else:
+                elements = [str(element) for element in elements]
+                
+            label_gas = QLabel(f"{gas}:")
+            label_gas.setAlignment(Qt.AlignLeft)
+            label_gas.setStyleSheet("color: #FFD700; font-size: 14px; font-weight: bold;")
+            label_gas.setObjectName(f"gas_label_{gas.replace(' ', '_')}")
+            self.sidebar_layout.addWidget(label_gas)
+            #Line Below appends them to make sure this gets deleted when 
+            #a new generation takes placce
+            self.gas_labels.append(label_gas)
+            #Prints the list of elements where they are suppost to be in corilation to the yellow bolds
+            for element in elements:
+                label_element = QLabel(f"  - {element}")
+                label_element.setAlignment(Qt.AlignLeft)
+                label_element.setStyleSheet("color: white; font-size: 12px;")
+                label_element.setObjectName(f"element_label_{element}")
+                self.sidebar_layout.addWidget(label_element)
+        #used to generate moons based on how many moons are attached to the planet
+        while moons >= 1:
+            
+            # Inform the user which planet is being generated
+            print(f"Generating a Moon for the Gas Gaint in the {zone} zone...")
+                
+            # Optionally display this in the UI
+            label_info = QLabel(f"Generating a Moon for the Gas Gaint in the {zone} zone...")
+            label_info.setAlignment(Qt.AlignLeft)
+            label_info.setStyleSheet("color: #FFD700; font-size: 12px;")
+            label_info.setObjectName(f"info_label_{zone.replace(' ', '_')}")
+            self.sidebar_layout.addWidget(label_info)
+            self.updateMOONS(body, zone)
+            
+            moons -=1
+        self.sidebar_layout.addStretch()
+        
+    #Generates a Moon
+    def updateMOONS(self, pbody, zone):
+        #debugline
+        print(f'Oh a moon orbiting planet in the {zone}! AMAZING')
+        #Grabs all variables from a generated moon
+        body, gravity, Atmosphere, atmosphericComp, climate, habitability, Landmasses, LandDesc = moonCreation(pbody, zone)
+        self.bits_labels = []
+        
+        #Seperates the variables into different parts
+        moon_parts = {
+            "Body": body,
+            "Gravity": gravity,
+            "Atmoshere": Atmosphere,
+            "Atomsheric Composition": atmosphericComp,
+            "Climate": climate,
+            "Habitability": habitability,
+            "Landmasses": Landmasses,
+            "Landmass Description": LandDesc,
+        }
+        
+        #This makes it so if it is a single item it doesn't get turned into a list
+        for bits, elements in moon_parts.items():
+            if not isinstance(elements, list):  # If it's not a list, make it one
+                elements = [str(elements)]
+            else:
+                elements = [str(element) for element in elements]
+
+            label_bits = QLabel(f"{bits}:")
+            label_bits.setAlignment(Qt.AlignLeft)
+            label_bits.setStyleSheet("color: #FFD700; font-size: 14px; font-weight: bold;")
+            label_bits.setObjectName(f"bits_label_{bits.replace(' ', '_')}")
+            self.sidebar_layout.addWidget(label_bits)
+            #Line Below appends them to make sure this gets deleted when 
+            #a new generation takes placce
+            self.bits_labels.append(label_bits)
+            #Prints the list of elements where they are suppost to be in corilation to the yellow bolds
             for element in elements:
                 label_element = QLabel(f"  - {element}")
                 label_element.setAlignment(Qt.AlignLeft)
@@ -260,8 +443,9 @@ class StarGeneratorUI(QWidget):
                 label_element.setObjectName(f"element_label_{element}")
                 self.sidebar_layout.addWidget(label_element)
         self.sidebar_layout.addStretch()
-    
-    # was used to test didnt work as intended
+        
+        
+    # Maybe works need more testing probably should be used in the future
     def clearSidebar(self):
         """Removes all widgets from the sidebar layout."""
         for index in reversed(range(self.sidebar_layout.count())):
