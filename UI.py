@@ -24,18 +24,20 @@ class StarGeneratorUI(QWidget):
         sidebar = QWidget()
         sidebar.setFixedWidth(200)
         self.sidebar_layout = QVBoxLayout(sidebar)
+        self.sidebar_layout.addStretch()
         #default text
         #and sidebar labels
-        self.sidebar_label_systemfeatures = QLabel("")
+        self.sidebar_label_systemfeatures = QLabel("System Features")
         self.sidebar_label_star = QLabel("")
         self.sidebar_label_systemfeatures.setAlignment(Qt.AlignCenter)
         self.sidebar_label_star.setAlignment(Qt.AlignCenter)
         self.sidebar_layout.addWidget(self.sidebar_label_systemfeatures)
         self.sidebar_layout.addWidget(self.sidebar_label_star)
-
         self.sidebar_layout.addStretch()
+
         sidebar.setStyleSheet("background-color: #2E3440; color: white;")
         layout.addWidget(sidebar)
+
 
         #custom style labels
         self.label = QLabel("Click 'Generate' to get a star type", self)
@@ -124,7 +126,6 @@ class StarGeneratorUI(QWidget):
             widget = self.sidebar_layout.itemAt(index).widget()
             if widget is not None and widget.objectName().startswith("feature_label_"):
                 widget.deleteLater()
-
         for index, feature in enumerate(features):
             label = QLabel(feature)
             label.setAlignment(Qt.AlignCenter)
