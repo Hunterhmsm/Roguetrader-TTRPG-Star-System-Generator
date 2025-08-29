@@ -27,7 +27,7 @@ def main():
         window.updateSidebarStars(startype) #this updates the sidebar
         window.updateSidebarSystemFeatures(system_features) #This adds system features
         window.updateSystemElements(system_Elements) #this adds system elements
-        window.triggerPlanetGen(system_Elements) #this adds planet generation
+        # window.triggerPlanetGen(system_Elements) #this adds planet generation
         
     #create the UI and pass the callback to the button
     window = StarGeneratorUI(generate)
