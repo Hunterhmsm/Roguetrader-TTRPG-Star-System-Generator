@@ -90,12 +90,12 @@ class PlanetHeaderWidget(QWidget):
         """)
         self.close_button.setToolTip("Remove this planet's details")
         
-        # Add widgets to layout
+        # add widgets to layout
         layout.addWidget(self.title_label)
-        layout.addStretch()  # push the close button to the right
+        layout.addStretch()  # Push the close button to the right
         layout.addWidget(self.close_button)
 
-#a collapsible section widget with a title and content area
+# a collapsible section widget with a title and content area
 class CollapsibleSection(QFrame):
     
     def __init__(self, title="", parent=None):
@@ -148,8 +148,8 @@ class CollapsibleSection(QFrame):
         main_layout.setSpacing(0)
         main_layout.addWidget(self.toggle_button)
         main_layout.addWidget(self.content_area)
-
-    #toggle the visibility of the content area
+        
+    # toggle the visibility of the content area
     def on_toggle(self):
         if self.toggle_button.isChecked():
             self.content_area.show()
@@ -157,19 +157,18 @@ class CollapsibleSection(QFrame):
         else:
             self.content_area.hide()
             self.toggle_button.setText(f"▶ {self.toggle_button.text().replace('▶ ', '').replace('▼ ', '')}")
-
+    
     # add a widget to the content area
     def add_content_widget(self, widget):
         self.content_layout.addWidget(widget)
-
+    
     # remove all widgets from the content area
-
     def clear_content(self):
         while self.content_layout.count():
             child = self.content_layout.takeAt(0)
             if child.widget():
                 child.widget().deleteLater()
-
+    
     # set the expanded state programmatically
     def set_expanded(self, expanded):
         self.toggle_button.setChecked(expanded)
@@ -223,7 +222,7 @@ class StarGeneratorUI(QWidget):
 
         # set the sidebar content widget to the scroll area
         self.sidebar_scroll.setWidget(self.sidebar_content)
-        self.sidebar_scroll.setFixedWidth(500)  # width
+        self.sidebar_scroll.setFixedWidth(400)  # width of the sidebar
         
         # add the scroll area to the main layout
         layout.addWidget(self.sidebar_scroll)
@@ -263,34 +262,49 @@ class StarGeneratorUI(QWidget):
         layout.addWidget(self.button)
         self.setLayout(layout)
 
-    #create a styled label for information display
-    def create_info_label(self, text, is_header=False):
+    # create a styled label for information display with proper indentation
+    def create_info_label(self, text, is_header=False, indent_level=0):
         label = QLabel(text)
         label.setAlignment(Qt.AlignLeft)
         label.setWordWrap(True)
         
+        # calculate padding based on indent level and bullet alignment
+        base_padding = 5  # base padding from left edge
+        bullet_width = 10  # space for bullet character "• "
+        indent_spacing = 15  # additional spacing per indent level
+        
         if is_header:
-            label.setStyleSheet("""
-                QLabel {
+            # headers use base padding plus indent spacing
+            left_padding = base_padding + (indent_level * indent_spacing)
+            label.setStyleSheet(f"""
+                QLabel {{
                     color: #FFD700;
                     font-size: 13px;
                     font-weight: bold;
-                    padding: 2px 0px 0px 5px;
+                    padding: 2px 0px 0px {left_padding}px;
                     margin: 0px;
-                }
+                }}
             """)
         else:
-            label.setStyleSheet("""
-                QLabel {
+            # for bullet points, use base padding + indent + bullet space
+            # for non-bullet text, align with where bullet text would start
+            if text.strip().startswith('•'):
+                left_padding = base_padding + (indent_level * indent_spacing)
+            else:
+                # align with bullet text (after the bullet symbol)
+                left_padding = base_padding + (indent_level * indent_spacing) + bullet_width
+            
+            label.setStyleSheet(f"""
+                QLabel {{
                     color: white;
                     font-size: 11px;
-                    padding: 0px 0px 0px 10px;
+                    padding: 0px 0px 0px {left_padding}px;
                     margin: 0px;
-                }
+                }}
             """)
         return label
-    
-    #update the label with the generated star type
+
+    # update the label with the generated star type
     def updateLabel(self, text):
         self.label.setText(f"Generated Star Type: {text}")
 
@@ -310,8 +324,8 @@ class StarGeneratorUI(QWidget):
         top = (screen_height - height) // 2
 
         self.setGeometry(left, top, width, height)
-    
-    # resize the window to take up 1/2 of the screen
+
+    # resize the window to take up half the screen
     def setOneHalfScreenSize(self):
         screen = QApplication.primaryScreen().geometry()
         screen_width, screen_height = screen.width(), screen.height()
@@ -323,13 +337,12 @@ class StarGeneratorUI(QWidget):
         top = (screen_height - height) // 2
 
         self.setGeometry(left, top, width, height)
-
     # update the star information section
     def updateSidebarStars(self, star):
         self.star_section.clear_content()
         star_label = self.create_info_label(f"Star Type: {star}")
         self.star_section.add_content_widget(star_label)
-
+    
     # update the system features section
     def updateSidebarSystemFeatures(self, features):
         self.features_section.clear_content()
@@ -337,8 +350,8 @@ class StarGeneratorUI(QWidget):
         for feature in features:
             feature_label = self.create_info_label(f"• {feature}")
             self.features_section.add_content_widget(feature_label)
-    
-    # updates the system elements section based on the star type
+
+    # update the system elements section with clickable planet labels
     def updateSystemElements(self, systemElements):
         InnerCauldronElements, PrimaryBiosphereElements, OuterFeaturesElements = systemElements
         
@@ -377,8 +390,8 @@ class StarGeneratorUI(QWidget):
                 else:
                     element_label = self.create_info_label(f"• {element}")
                     self.elements_section.add_content_widget(element_label)
-    
-    # generate and display planet details when clicked
+
+    # generate planet details on demand
     def generate_planet_details(self, element_type, zone, planet_id):
         if planet_id in self.planet_data_cache and not self.planet_data_cache[planet_id]['generated']:
             print(f"Generating details for {element_type} in {zone}")
@@ -389,7 +402,7 @@ class StarGeneratorUI(QWidget):
             elif element_type == "Gas Gaint":
                 planet_data = self.generate_gas_giant_details(zone, planet_id)
             
-            # mark as generated
+            # marrk as generated
             self.planet_data_cache[planet_id]['generated'] = True
             self.planet_data_cache[planet_id]['data'] = planet_data
             
@@ -398,7 +411,7 @@ class StarGeneratorUI(QWidget):
         else:
             print(f"Details for {planet_id} already generated or not found")
 
-    # generate rock planet details and add to planets section
+    # generate rock planet details and return the widgets created 
     def generate_rock_planet_details(self, zone, planet_id):
         body, gravity, combinedOrbitFeatures, Atmosphere, atmosphericComp, climate, habitability, Landmasses, LandDesc, moons = rockPlanetCreation(zone)
         
@@ -428,25 +441,25 @@ class StarGeneratorUI(QWidget):
             else:
                 elements = [str(element) for element in elements]
             
-            part_header = self.create_info_label(f"  {part}:", is_header=True)
+            part_header = self.create_info_label(f"{part}:", is_header=True, indent_level=1)
             self.planets_section.add_content_widget(part_header)
             self.planet_widgets[planet_id].append(part_header)
             
             for element in elements:
-                element_label = self.create_info_label(f"    • {element}")
+                element_label = self.create_info_label(f"• {element}", indent_level=1)
                 self.planets_section.add_content_widget(element_label)
                 self.planet_widgets[planet_id].append(element_label)
         
         # handle Orbital Features separately
         if combinedOrbitFeatures:
-            orbital_header = self.create_info_label("  Orbital Features:", is_header=True)
+            orbital_header = self.create_info_label("Orbital Features:", is_header=True, indent_level=1)
             self.planets_section.add_content_widget(orbital_header)
             self.planet_widgets[planet_id].append(orbital_header)
             
             for i in range(0, len(combinedOrbitFeatures), 2):
                 if i < len(combinedOrbitFeatures):
                     feature_name = combinedOrbitFeatures[i]
-                    feature_label = self.create_info_label(f"    • {feature_name}")
+                    feature_label = self.create_info_label(f"• {feature_name}", indent_level=1)
                     self.planets_section.add_content_widget(feature_label)
                     self.planet_widgets[planet_id].append(feature_label)
                     
@@ -455,14 +468,14 @@ class StarGeneratorUI(QWidget):
                         if description and not description.startswith("\nOrbital Feature Description:"):
                             clean_desc = description.replace("\nOrbital Feature Description:", "").strip()
                             if clean_desc and clean_desc != "nothing":
-                                desc_label = self.create_info_label(f"      {clean_desc}")
+                                desc_label = self.create_info_label(clean_desc, indent_level=1)
                                 self.planets_section.add_content_widget(desc_label)
                                 self.planet_widgets[planet_id].append(desc_label)
         
         # generate moons if any
         moon_counter = 1
         while moons >= 1:
-            moon_header = self.create_info_label(f"  Moon {moon_counter}:", is_header=True)
+            moon_header = self.create_info_label(f"Moon {moon_counter}:", is_header=True, indent_level=1)
             self.planets_section.add_content_widget(moon_header)
             self.planet_widgets[planet_id].append(moon_header)
             
@@ -478,12 +491,11 @@ class StarGeneratorUI(QWidget):
         
         return {"type": "rock", "zone": zone, "moons": moon_counter - 1}
     
-    # generate gas giant details and add to planets section
+    # generate gas giant details and return the widgets created
     def generate_gas_giant_details(self, zone, planet_id):
-
         body, gravity, combinedOrbitFeatures, moons = gasPlanetCreation(zone)
         
-        # tore widgets for this gas giant so we can remove them later
+        # store widgets for this gas giant so we can remove them later
         self.planet_widgets[planet_id] = []
         
         # add header for this specific gas giant with close button
@@ -503,25 +515,25 @@ class StarGeneratorUI(QWidget):
             else:
                 elements = [str(element) for element in elements]
                 
-            part_header = self.create_info_label(f"  {gas}:", is_header=True)
+            part_header = self.create_info_label(f"{gas}:", is_header=True, indent_level=1)
             self.planets_section.add_content_widget(part_header)
             self.planet_widgets[planet_id].append(part_header)
             
             for element in elements:
-                element_label = self.create_info_label(f"    • {element}")
+                element_label = self.create_info_label(f"• {element}", indent_level=1)
                 self.planets_section.add_content_widget(element_label)
                 self.planet_widgets[planet_id].append(element_label)
         
         # handle Orbital Features separately for gas giants
         if combinedOrbitFeatures:
-            orbital_header = self.create_info_label("  Orbital Features:", is_header=True)
+            orbital_header = self.create_info_label("Orbital Features:", is_header=True, indent_level=1)
             self.planets_section.add_content_widget(orbital_header)
             self.planet_widgets[planet_id].append(orbital_header)
             
             for i in range(0, len(combinedOrbitFeatures), 2):
                 if i < len(combinedOrbitFeatures):
                     feature_name = combinedOrbitFeatures[i]
-                    feature_label = self.create_info_label(f"    • {feature_name}")
+                    feature_label = self.create_info_label(f"• {feature_name}", indent_level=1)
                     self.planets_section.add_content_widget(feature_label)
                     self.planet_widgets[planet_id].append(feature_label)
                     
@@ -530,14 +542,14 @@ class StarGeneratorUI(QWidget):
                         if description and description.strip():
                             clean_desc = description.strip()
                             if clean_desc and clean_desc != "No notable features are added to the Gas Giant's orbit":
-                                desc_label = self.create_info_label(f"      {clean_desc}")
+                                desc_label = self.create_info_label(clean_desc, indent_level=1)
                                 self.planets_section.add_content_widget(desc_label)
                                 self.planet_widgets[planet_id].append(desc_label)
         
         # generate moons if any
         moon_counter = 1
         while moons >= 1:
-            moon_header = self.create_info_label(f"  Moon {moon_counter}:", is_header=True)
+            moon_header = self.create_info_label(f"Moon {moon_counter}:", is_header=True, indent_level=1)
             self.planets_section.add_content_widget(moon_header)
             self.planet_widgets[planet_id].append(moon_header)
             
@@ -552,9 +564,9 @@ class StarGeneratorUI(QWidget):
         self.planet_widgets[planet_id].append(separator)
         
         return {"type": "gas", "zone": zone, "moons": moon_counter - 1}
+    
     # generate moon details and return the widgets created
     def generate_moon_details(self, pbody, zone):
-
         body, gravity, Atmosphere, atmosphericComp, climate, habitability, Landmasses, LandDesc = moonCreation(pbody, zone)
         
         moon_widgets = []
@@ -576,12 +588,12 @@ class StarGeneratorUI(QWidget):
             else:
                 elements = [str(element) for element in elements]
 
-            part_header = self.create_info_label(f"    {bits}:", is_header=True)
+            part_header = self.create_info_label(f"{bits}:", is_header=True, indent_level=2)
             self.planets_section.add_content_widget(part_header)
             moon_widgets.append(part_header)
             
             for element in elements:
-                element_label = self.create_info_label(f"      • {element}")
+                element_label = self.create_info_label(f"• {element}", indent_level=2)
                 self.planets_section.add_content_widget(element_label)
                 moon_widgets.append(element_label)
         
@@ -603,8 +615,7 @@ class StarGeneratorUI(QWidget):
             
             print(f"Removed details for {planet_id}")
 
-
-    #removes all content from all sidebar sections    
+    # removes all content from all sidebar sections    
     def clearSidebar(self):
         self.star_section.clear_content()
         self.features_section.clear_content()
